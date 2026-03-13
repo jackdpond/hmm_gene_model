@@ -1,7 +1,15 @@
 # hmm_gene_model
 
-## Data Source
+## Data Source (yeast data)
 
-GEO Access: [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE138662](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE138662)
+GEO Access: [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM77298](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM77298)
 
-Paper: [https://genome.cshlp.org/content/32/8/1463](https://genome.cshlp.org/content/32/8/1463)
+Paper: [https://www.science.org/doi/10.1126/science.1120499](https://www.science.org/doi/10.1126/science.1120499)
+
+See also `docs/data-creators`
+
+## project layout
+
+`src` code and data from previous dataset (glioblastoma data), to update to new data source (yeast data)
+
+`docs` documents, including project-relevant writing and work from the data creators
