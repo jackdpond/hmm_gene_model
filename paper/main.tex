@@ -16,7 +16,7 @@
 %%% WARNING: Do NOT change the page size, fonts, or margins!  Penalties will apply.
 %%% WARNING: Do NOT change the page size, fonts, or margins!  Penalties will apply.
 
-\title{Modeling Climate Change Over Time}
+\title{Illuminating a High Dimensional Biological Cycle}
 \author{Jackson Pond, Isaac Smith, Henry Tullis, Wyatt Wimmer}
 
 % Change the date to match the date you actually wrote this paper
@@ -41,10 +41,8 @@ The advent of genome-wide transcriptomics unveiled hitherto untapped reservoirs 
 these extensive transcriptomic datasets thus becomes an important challenge in obtaining a better understanding of cellular life.
 
 The scale and dimensionality of transciptome data are extreme. At any given moment, a cell may be expressing several thousand genes, and the number of transcripts in a cell's transcriptome is likely in the hundreds of thousands. Clever and robust data analysis techniques must be effectively deployed in order to coax out biologically realistic trends from such high-dimensional data and noise. In this paper, we attempt to 
-apply several data dimension reduction and analysis techniques on a buddying yeast $\textit{Saccharomyces Cerecisiae}$ transcriptome dataset. These data, which consist of a total RNA transcriptome of a budding yeast cell prepared ~25 minute intervals, provide insight into how the transcriptome of yeast changes temporally. Specifically, our analysis attempts to use various techniques to determine the period of a yeast cell's metabolic cycle and to determine which genes 
+apply several data dimension reduction and analysis techniques on a buddying yeast $\textit{Saccharomyces Cerecisiae}$ transcriptome dataset. These data, which consist of a total RNA transcriptome of a budding yeast cell prepared at ~25 minute intervals, provide insight into how the transcriptome of yeast changes temporally. Specifically, our analysis attempts to use various techniques to determine the period of respiratory bursts in a synchronized yeast population's metabolic cycle and to determine which genes 
 are expressed during the various phases of the metabolic cycle. Our investigation parses through a comlex transcriptomic dataset to provide insights into the specific cellular mechanisms of yeast metabolism, but also highlights advantages and drawbacks of various data analysis techniques on a high-dimensional, periodic dataset.
-
-
 
 %%Second Section
 \section{Data} 
@@ -59,13 +57,24 @@ are expressed during the various phases of the metabolic cycle. Our investigatio
 % \label{fig:MeanSquaredError} % for automatic cross referencing
 % \end{figure}
 
+Our dataset consists of a sequence of yeast microarray assays. Each microarray was designed to measure the abundance of the same set of 6,400 yeast gene transcripts along with other RNA transcripts of interest, bringing the total to over 9000 transcriptomic features per assay. These assays were performed separately on 36 samples taken at regular 25-minute intervals from a metabolically oscillating yeast population. Our dataset is publicly available at the Gene Expression Omnibus \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM77298}{here} and comes from a peer-reviewed publication in \textit{Science} \href{https://www.science.org/doi/10.1126/science.1120499}{here}.
 
+Even though microarrays are designed to be identical assays, microarray data is still subject to variability due to variations in staining and other experimental parameters. In the supplementary information, the authors of the dataset describe median-normalizing the raw intensity values for each gene (corresponding roughly with transcript concentrations) to reduce noise-based differences in total expression levels, which could have arisen due to differences in staining, etc. Although this preprocessing step was a standard practice at the time of this publication, it does rely on the assumption that the true median expression intensities for every chip were identical. This assumption means that our inference capabilities are limited - if the yeast truly produced more transcripts in total for some time points, resulting in a median, this difference would be masked by the median normalization. As a result, our data represents relativized rather than absolute expression levels, and we are unable to prove that the yeast produced absolutely more or less of a transcript from one time point to another, only whether each gene was more or less expressed at a timestep relative to the median transcript intensity at that timestep.
+
+The $>$9,000 time series produced by these normalized microarray results represent enormous ranges of mean and variance, with some transcripts expressed several orders of magnitude more than others. To attempt to make our median-normalized expression time series more comparable, we took an $\text{arcsinh}$ transformation of all intensity values. This is similar to log-transforming data but with better handling of zeros, which are common in transcriptomics. Although improvements to this process such as transforming with a learned affine function prior to arcsinh could be made (see \href{https://academic.oup.com/bioinformatics/article/18/suppl_1/S96/231881}{here}), visual inspection of the data confirmed that the data were more comparable and we decided to proceed.
+
+The arcsinh data was used for our analyses that require comparing relative sizes of expression between different genes, but for our analyses that cluster genes, it also made sense to standardize the expression values of each gene by the mean and standard deviation of that gene.
 
 %% Third Section
 \section{Methods} 
 % Your project should involve a thoughtful and original use of several of the machine learning methods and ideas we have learned in class and at least one idea or method we have not covered in class.  
 
 % In this section you should describe and justify your selection of models, your choices of methods, any feature engineering you did, and the ways and reasons you chose your hyperparameters or network architectures.   Your discussion should demonstrate a clear understanding of the principles involved and of the strengths and weaknesses of the models and methods used.  
+
+The paper we are building upon emphasized the periodic nature of many of the genes in the dataset. As such, our analysis included an independent verification of a suitable period length, a process to filter genes by periodicity, and additional analyses sought to better understand the periodic modules in our data.
+
+\subsection{Period Length Identification}
+
 We fit Gaussian Mixture Models (GMMs) to the micro-array expression data to identify clusters of co-expressed genes and to recover the underlying period of the yeast metabolic cycle.
 
 Data. The input is an arcsinh-normalized, per-chip corrected expression matrix of 9,275 genes across 36 time points, loaded from normalized-perchip-arcsinh.csv. The arcsinh transform normalizes counts to allow for comparing variances across genes, even for low-variance genes.
@@ -83,6 +92,15 @@ Additionally, we fit a GMM on the 200 highest variance genes and then projected 
 Conclusions. The most important takeaway of the GMM clustering is the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 seconds. This knowledge will be used in further analysis methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
 
 To do still. The selection of four hidden states is essentially arbitrary. While it seems to work well, the selection should be made more rigorous, perhaps via a grid search. We will also fit a GMMHMM for inference and prediction. The question of why soft-clustering still stands as well, and we will either successfully soft-cluster or explain why we cannot.
+
+\subsection{Periodic Gene Identification}
+Once an overall period length was identified, we used permutation testing on autocorrelation to identify which of the $>$9,000 genes were oscillatory on that period. We computed the autocorrelation of the 36-timestep time series for each gene with delay equal to the optimal period length. We then randomized the order of the intensities in each time series 100 times and computed the autocorrelations of these time series. If the autocorrelation a true series was at the 95th percentile or greater relative to the randomized baseline, we accepted the gene as likely periodic and gave it a periodic label for downstream analyses. The other genes were rejected as non-periodic, since even significant numbers of randomized permutations of their time series had similar autocorrelations at the optimal period delay.
+
+\subsection{Clustering and Visualization of Periodic Genes}
+
+\subsection{ARMA}
+
+\subsection{Other analyses?}
 
 
 %%Fourth Section
