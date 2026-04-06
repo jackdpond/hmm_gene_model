@@ -119,7 +119,9 @@ TODO: How should we incorporate a train/test split?
 \begin{figure}
     \includegraphics[scale=0.5]{figures/rough-cell-expression-cycles.png}
 
-    Figure 1. Temporal cycles in cell state. [TODO: Cleanup and label, maybe plot cluster assignment over time] Left: The 200 genes with the highest variance in the arcsinh transformed data were extracted and clustered with a GMM with four components, then the data dimensionality was reduced via PCA. Right: The same plot with a line connecting adjacent timesteps. When visualized, a clearly periodic pattern was clear in cluster assignment, repeating every 12 timesteps.
+    \includegraphics[scale=0.5]{figures/rough-gmm-classes.png}
+
+    Figure 1. Temporal cycles in cell state. [TODO: Cleanup and label] Upper Left: The 200 genes with the highest variance in the arcsinh transformed data were extracted and clustered with a GMM with four components, then the data dimensionality was reduced via PCA. Upper Right: The same plot with a line connecting adjacent timesteps. Bottom: When visualized, a clearly periodic pattern was clear in cluster assignment, repeating every 12 timesteps.
 \end{figure}
 
 \subsection{Periodic Gene Identification}

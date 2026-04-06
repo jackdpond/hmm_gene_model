@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex main"] 1775519213 "main.aux" "main.bbl" "main" 1775519213
+["bibtex main"] 1775519424 "main.aux" "main.bbl" "main" 1775519425
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/alpha.bst" 1292289607 23907 a5f93555796fb564b924339521f10a7c ""
-  "main.aux" 1775519178 2932 57ccec0191f2a868a1d128dfc215a56b "pdflatex"
+  "main.aux" 1775519425 2932 8bed24cc0e22ed89be0f8a18981ccd49 "pdflatex"
   "refs.bib" 0 -1 0 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1775519177 "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" "main.pdf" "main" 1775519213
+["pdflatex"] 1775519424 "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" "main.pdf" "main" 1775519425
   "/etc/texmf/web2c/texmf.cnf" 1759370702 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" 1775519213 21922 9cd45f3faecae8338957f1a54149bf50 ""
+  "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" 1775519424 21965 3220b015bcb8307e39c3630738b33f17 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -108,13 +108,14 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1759370706 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1769755252 1405648 204b0127b8bd243e6191f93bcd2e4860 ""
   "figures/rough-cell-expression-cycles.png" 1775517843 199172 4b8c89ff879b4302bb6be0cffe509f3e ""
+  "figures/rough-gmm-classes.png" 1775519352 35572 55bcaccb50cebc530f57fd6c5863e404 ""
   "figures/rough-periodic-gene.png" 1775518673 133159 531b053b000ddcf25b66c8828c136972 ""
   "figures/rough-periodic-normalized-gene.png" 1775518569 267257 7483927e76cab6727e9871f280af3dfc ""
   "figures/rough-seasonal-clusters.png" 1775517287 93722 420b544e56f9c3a651f03b770e91b57c ""
-  "main.aux" 1775519178 2932 57ccec0191f2a868a1d128dfc215a56b "pdflatex"
+  "main.aux" 1775519425 2932 8bed24cc0e22ed89be0f8a18981ccd49 "pdflatex"
   "main.bbl" 0 -1 0 "bibtex main"
-  "main.out" 1775519178 2890 9e96b53b5c73611828618715f5274ace "pdflatex"
-  "main.tex" 1775519213 21922 9cd45f3faecae8338957f1a54149bf50 ""
+  "main.out" 1775519425 2890 9e96b53b5c73611828618715f5274ace "pdflatex"
+  "main.tex" 1775519424 21965 3220b015bcb8307e39c3630738b33f17 ""
   (generated)
   "main.aux"
   "main.log"
