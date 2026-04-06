@@ -57,11 +57,11 @@ are expressed during the various phases of the metabolic cycle. Our investigatio
 % \label{fig:MeanSquaredError} % for automatic cross referencing
 % \end{figure}
 
-Our dataset consists of a sequence of yeast microarray assays. Each microarray was designed to measure the abundance of the same set of 6,400 yeast gene transcripts along with other RNA transcripts of interest, bringing the total to over 9000 transcriptomic features per assay. These assays were performed separately on 36 samples taken at regular 25-minute intervals from a metabolically oscillating yeast population. Our dataset is publicly available at the Gene Expression Omnibus \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM77298}{here} and comes from a peer-reviewed publication in \textit{Science} \href{https://www.science.org/doi/10.1126/science.1120499}{here}.
+Our dataset consists of a sequence of yeast microarray assays. Each microarray was designed to measure the abundance of the same set of 6,400 yeast gene transcripts along with other RNA transcripts of interest, bringing the total to 9725 transcriptomic features per assay. These assays were performed separately on 36 samples taken at regular 25-minute intervals from a metabolically oscillating yeast population. Our dataset is publicly available at the Gene Expression Omnibus \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM77298}{here} and comes from a peer-reviewed publication in \textit{Science} \href{https://www.science.org/doi/10.1126/science.1120499}{here}.
 
 Even though microarrays are designed to be identical assays, microarray data is still subject to variability due to variations in staining and other experimental parameters. In the supplementary information, the authors of the dataset describe median-normalizing the raw intensity values for each gene (corresponding roughly with transcript concentrations) to reduce noise-based differences in total expression levels, which could have arisen due to differences in staining, etc. Although this preprocessing step was a standard practice at the time of this publication, it does rely on the assumption that the true median expression intensities for every chip were identical. This assumption means that our inference capabilities are limited - if the yeast truly produced more transcripts in total for some time points, resulting in a median, this difference would be masked by the median normalization. As a result, our data represents relativized rather than absolute expression levels, and we are unable to prove that the yeast produced absolutely more or less of a transcript from one time point to another, only whether each gene was more or less expressed at a timestep relative to the median transcript intensity at that timestep.
 
-The $>$9,000 time series produced by these normalized microarray results represent enormous ranges of mean and variance, with some transcripts expressed several orders of magnitude more than others. To attempt to make our median-normalized expression time series more comparable, we took an $\text{arcsinh}$ transformation of all intensity values. This is similar to log-transforming data but with better handling of zeros, which are common in transcriptomics. Although improvements to this process such as transforming with a learned affine function prior to arcsinh could be made (see \href{https://academic.oup.com/bioinformatics/article/18/suppl_1/S96/231881}{here}), visual inspection of the data confirmed that the data were more comparable and we decided to proceed.
+The 9725 time series produced by these normalized microarray results represent enormous ranges of mean and variance, with some transcripts expressed several orders of magnitude more than others. To attempt to make our median-normalized expression time series more comparable, we took an $\text{arcsinh}$ transformation of all intensity values. This is similar to log-transforming data but with better handling of zeros, which are common in transcriptomics. Although improvements to this process such as transforming with a learned affine function prior to arcsinh could be made (see \href{https://academic.oup.com/bioinformatics/article/18/suppl_1/S96/231881}{here}), visual inspection of the data confirmed that the data were more comparable and we decided to proceed.
 
 The arcsinh data was used for our analyses that require comparing relative sizes of expression between different genes, but for our analyses that cluster genes, it also made sense to standardize the expression values of each gene by the mean and standard deviation of that gene.
 
@@ -75,9 +75,7 @@ The paper we are building upon emphasized the periodic nature of many of the gen
 
 \subsection{Period Length Identification}
 
-We fit Gaussian Mixture Models (GMMs) to the micro-array expression data to identify clusters of co-expressed genes and to recover the underlying period of the yeast metabolic cycle.
-
-Data. The input is an arcsinh-normalized, per-chip corrected expression matrix of 9,275 genes across 36 time points, loaded from normalized-perchip-arcsinh.csv. The arcsinh transform normalizes counts to allow for comparing variances across genes, even for low-variance genes.
+We fit Gaussian Mixture Models (GMMs) to the full set of arcsinh-transformed gene expressions to identify clusters of co-expressed genes and to recover the underlying period of the yeast metabolic cycle.
 
 Approach 1: High-variance feature selection. A naive GMM fit on all 9,275 genes as features suffers from the curse of dimensionality ($n \ll d$), producing overconfident, nearly deterministic cluster assignments. To try to mitigate this, we discarded all but the $n$ highest variance genes (rows) and fit a 4-component GMM on all 36 time points. The intuition is that high-variance time points are the most discriminative for separating phases of the metabolic cycle. We swept $n$ from 200 to 1100 in steps of 100, observing that cluster assignments were stable and reflected a roughly cyclic sequence consistent with a ~300 s period, or three total periods in the experiment.
 
@@ -94,9 +92,15 @@ Conclusions. The most important takeaway of the GMM clustering is the recovery o
 To do still. The selection of four hidden states is essentially arbitrary. While it seems to work well, the selection should be made more rigorous, perhaps via a grid search. We will also fit a GMMHMM for inference and prediction. The question of why soft-clustering still stands as well, and we will either successfully soft-cluster or explain why we cannot.
 
 \subsection{Periodic Gene Identification}
-Once an overall period length was identified, we used permutation testing on autocorrelation to identify which of the $>$9,000 genes were oscillatory on that period. We computed the autocorrelation of the 36-timestep time series for each gene with delay equal to the optimal period length. We then randomized the order of the intensities in each time series 100 times and computed the autocorrelations of these time series. If the autocorrelation a true series was at the 95th percentile or greater relative to the randomized baseline, we accepted the gene as likely periodic and gave it a periodic label for downstream analyses. The other genes were rejected as non-periodic, since even significant numbers of randomized permutations of their time series had similar autocorrelations at the optimal period delay.
+Once an overall period length was identified, we used permutation testing on autocorrelation to identify which of the 9725 genes were oscillatory on that period. We computed the autocorrelation of the 36-timestep time series for each gene with delay equal to the optimal period length. We then randomized the order of the intensities in each time series 100 times and computed the autocorrelations of these time series. If the autocorrelation a true series was at the 95th percentile or greater relative to the randomized baseline, we accepted the gene as likely periodic and gave it a periodic label for downstream analyses. The other genes were rejected as non-periodic, since even significant numbers of randomized permutations of their time series had similar autocorrelations at the optimal period delay.
 
-\subsection{Clustering and Visualization of Periodic Genes}
+\subsection{Classical Time Series Analysis}
+
+Once a suitable overall period and individual periodic genes were identified, we used ideas from classical time series analysis to investigate the periodic genes specifically in more depth. We obtained the classical time series decomposition of each individual gene via moving averages over the 24 central time steps (as moving average requires rejecting timesteps at the beginning and end), and then clustered the seasonal components identified across these 24 timesteps using GMMs optimized for cluster count by inspecting the AIC and BIC curves. We then inspected the individual clusters in more depth through visualization.
+
+TODO: Semantic Evaluation of Clusters via AI model
+
+TODO: How should we incorporate a train/test split?
 
 \subsection{ARMA}
 
@@ -107,7 +111,21 @@ Once an overall period length was identified, we used permutation testing on aut
 \section{Results and Analysis} 
 % Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
 
+\subsection{Period Length Identification}
+* a lot of this appears to be above in methods - we might move some of it down here*
 
+... a period of 12 timesteps, corresponding to $25 \times 12 = 300$ minutes, was the clear choice in all cases.
+
+\subsection{Periodic Gene Identification}
+We performed our permutation testing to identify the genes with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the genes - over half of all genes - were identified as periodic with the 12 timestep period.
+
+\subsection{Classical Time Series Analysis}
+After extracting the seasonal decomposition for each gene's time series using the mean- and variance-standardized data, we attempted to cluster these seasonal components using GMMs. We chose eight clusters, because this minimized the BIC and gave a local minima in the AIC.
+
+Visualization of the seasonal components of normalized expression by cluster revealed distinct temporal modules of genetic expression in all but one cluster, with peaks or troughs of different shapes and sizes at different phases of the cycle. Of these 7 clusters, visualization showed that two pairs appeard to be especially similar to one another, suggesting that perhaps a more natural cluster number would be 5 or 6. The remaining cluster appeared to represent a catchall for noisy time series that did not have a clear choice in cluster.
+\subsection{ARMA}
+
+\subsection{Other analyses?}
 
 
 %%Fifth Section
@@ -124,8 +142,7 @@ approaches to reproducibility lends additional credibility to experimental concl
 %% Sixth section
 \section{Conclusion} 
 % Describe the final conclusions that you draw from your computations, results, and analysis. 
-
-
+Analyzing the data provided an independent confirmation of some of the Yeast paper's authors conclusions. For example, the period they identified from the data (300 minutes) for the yeast metabolic cycle oscillations via a maximum likelihood analysis was rediscovered by our independent use of GMMs to cluster the timesteps, and we like the authors identified slightly more than half of the dataset's genes as periodic with this period. This concordance reinforces the strength of those conclusions by the original authors about their data. We also were able to provide novel analyses and interpretations of the data that the authors did not reach. For example, our extraction of the seasonal component of the standardized time series and our use of GMMs to cluster it revealed 5-7 distinct periodic modules of activation, which improves upon the granularity of the authors' original analysis identifying only three clusters using k-means. This increased granularity could lead to improved biological insight. (Some conclusions about the success of any kind of predictions on the time series?)
 
 
 %All text before this line should end before page 11 starts.
