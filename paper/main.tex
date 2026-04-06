@@ -116,6 +116,12 @@ TODO: How should we incorporate a train/test split?
 
 ... a period of 12 timesteps, corresponding to $25 \times 12 = 300$ minutes, was the clear choice in all cases.
 
+\begin{figure}
+    \includegraphics[scale=0.5]{figures/rough-cell-expression-cycles.png}
+
+    Figure 1. Temporal cycles in cell state. [TODO: Cleanup and label, maybe plot cluster assignment over time] Left: The 200 genes with the highest variance in the arcsinh transformed data were extracted and clustered with a GMM with four components, then the data dimensionality was reduced via PCA. Right: The same plot with a line connecting adjacent timesteps. When visualized, a clearly periodic pattern was clear in cluster assignment, repeating every 12 timesteps.
+\end{figure}
+
 \subsection{Periodic Gene Identification}
 We performed our permutation testing to identify the genes with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the genes - over half of all genes - were identified as periodic with the 12 timestep period.
 
@@ -123,6 +129,13 @@ We performed our permutation testing to identify the genes with significant 12-t
 After extracting the seasonal decomposition for each gene's time series using the mean- and variance-standardized data, we attempted to cluster these seasonal components using GMMs. We chose eight clusters, because this minimized the BIC and gave a local minima in the AIC.
 
 Visualization of the seasonal components of normalized expression by cluster revealed distinct temporal modules of genetic expression in all but one cluster, with peaks or troughs of different shapes and sizes at different phases of the cycle. Of these 7 clusters, visualization showed that two pairs appeard to be especially similar to one another, suggesting that perhaps a more natural cluster number would be 5 or 6. The remaining cluster appeared to represent a catchall for noisy time series that did not have a clear choice in cluster.
+
+\begin{figure}
+    \includegraphics[scale=0.5]{figures/rough-seasonal-clusters.png}
+
+    Figure 2: Temporal expression modules. [TODO: Cleanup + Label Graph] Left: UMAP of genes according to the seasonal component of their standardized expressions, colored by GMM cluster. Right: The seven clearly consistent GMM clusters. The noisy cluster (1) was removed from the analysis.
+\end{figure}
+
 \subsection{ARMA}
 
 \subsection{Other analyses?}

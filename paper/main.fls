@@ -613,6 +613,16 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+INPUT ./figures/rough-cell-expression-cycles.png
+INPUT ./figures/rough-cell-expression-cycles.png
+INPUT figures/rough-cell-expression-cycles.png
+INPUT ./figures/rough-cell-expression-cycles.png
+INPUT ./figures/rough-cell-expression-cycles.png
+INPUT ./figures/rough-seasonal-clusters.png
+INPUT ./figures/rough-seasonal-clusters.png
+INPUT figures/rough-seasonal-clusters.png
+INPUT ./figures/rough-seasonal-clusters.png
+INPUT ./figures/rough-seasonal-clusters.png
 INPUT main.aux
 INPUT ./main.out
 INPUT ./main.out
