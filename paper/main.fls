@@ -618,6 +618,16 @@ INPUT ./figures/rough-cell-expression-cycles.png
 INPUT figures/rough-cell-expression-cycles.png
 INPUT ./figures/rough-cell-expression-cycles.png
 INPUT ./figures/rough-cell-expression-cycles.png
+INPUT ./figures/rough-periodic-gene.png
+INPUT ./figures/rough-periodic-gene.png
+INPUT figures/rough-periodic-gene.png
+INPUT ./figures/rough-periodic-gene.png
+INPUT ./figures/rough-periodic-gene.png
+INPUT ./figures/rough-periodic-normalized-gene.png
+INPUT ./figures/rough-periodic-normalized-gene.png
+INPUT figures/rough-periodic-normalized-gene.png
+INPUT ./figures/rough-periodic-normalized-gene.png
+INPUT ./figures/rough-periodic-normalized-gene.png
 INPUT ./figures/rough-seasonal-clusters.png
 INPUT ./figures/rough-seasonal-clusters.png
 INPUT figures/rough-seasonal-clusters.png

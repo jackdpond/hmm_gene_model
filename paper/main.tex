@@ -123,7 +123,14 @@ TODO: How should we incorporate a train/test split?
 \end{figure}
 
 \subsection{Periodic Gene Identification}
-We performed our permutation testing to identify the genes with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the genes - over half of all genes - were identified as periodic with the 12 timestep period.
+We performed our permutation testing to identify the genes with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the genes - over half of all genes - were identified as periodic with the 12 timestep period. Dimensionality reduction via PCA and visualization showed a clear difference in the distributions of periodic and non-periodic genes.
+
+\begin{figure}
+    \includegraphics[scale=0.4]{figures/rough-periodic-gene.png}
+    \includegraphics[scale=0.4]{figures/rough-periodic-normalized-gene.png}
+
+    Figure 2: Distributional differences in the time series of periodic and non-periodic genes. [TODO: Cleanup and add better labels] After using autocorrelation and permutation testing to determine which genes were periodic, we used dimensionality reduction to visualize the genes. Left: Principal Component Analysis visualization of the arcsinh-transformed expression values for each gene across the 36 timesteps. It appears that the first principal component represents something similar to average arcsinh expression across timesteps, which makes sense because arcsinh does not remove the massive differences in average expression (just rescales them). Right: Same values but normalized via a StandardScaler applied to each time series individually. Now all genes have the same mean expression, and the distributions of periodic and non-periodic genes are significantly different in both principal components.
+\end{figure}
 
 \subsection{Classical Time Series Analysis}
 After extracting the seasonal decomposition for each gene's time series using the mean- and variance-standardized data, we attempted to cluster these seasonal components using GMMs. We chose eight clusters, because this minimized the BIC and gave a local minima in the AIC.
@@ -133,7 +140,7 @@ Visualization of the seasonal components of normalized expression by cluster rev
 \begin{figure}
     \includegraphics[scale=0.5]{figures/rough-seasonal-clusters.png}
 
-    Figure 2: Temporal expression modules. [TODO: Cleanup + Label Graph] Left: UMAP of genes according to the seasonal component of their standardized expressions, colored by GMM cluster. Right: The seven clearly consistent GMM clusters. The noisy cluster (1) was removed from the analysis.
+    Figure 3: Temporal expression modules. [TODO: Cleanup + Label Graph] Left: UMAP of genes according to the seasonal component of their standardized periodic expressions, colored by GMM cluster. Right: The seven clearly consistent GMM clusters. The noisy cluster (1) was removed from the analysis.
 \end{figure}
 
 \subsection{ARMA}
