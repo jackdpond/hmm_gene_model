@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex main"] 1775519424 "main.aux" "main.bbl" "main" 1775519425
+["bibtex main"] 1775519676 "main.aux" "main.bbl" "main" 1775519677
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/alpha.bst" 1292289607 23907 a5f93555796fb564b924339521f10a7c ""
-  "main.aux" 1775519425 2932 8bed24cc0e22ed89be0f8a18981ccd49 "pdflatex"
+  "main.aux" 1775519677 3314 8623f6cfe43f957fa61188a3ed36cc96 "pdflatex"
   "refs.bib" 0 -1 0 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1775519424 "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" "main.pdf" "main" 1775519425
+["pdflatex"] 1775519676 "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" "main.pdf" "main" 1775519677
   "/etc/texmf/web2c/texmf.cnf" 1759370702 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" 1775519424 21965 3220b015bcb8307e39c3630738b33f17 ""
+  "/home/jhtullis/JHT_Shasta/Library_Shasta/School/ACME/projects/v3b/hmm_gene_model/paper/main.tex" 1775519676 22341 7cc2b29ff4604bdb98fcaf04a12289e5 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -112,10 +112,10 @@
   "figures/rough-periodic-gene.png" 1775518673 133159 531b053b000ddcf25b66c8828c136972 ""
   "figures/rough-periodic-normalized-gene.png" 1775518569 267257 7483927e76cab6727e9871f280af3dfc ""
   "figures/rough-seasonal-clusters.png" 1775517287 93722 420b544e56f9c3a651f03b770e91b57c ""
-  "main.aux" 1775519425 2932 8bed24cc0e22ed89be0f8a18981ccd49 "pdflatex"
+  "main.aux" 1775519677 3314 8623f6cfe43f957fa61188a3ed36cc96 "pdflatex"
   "main.bbl" 0 -1 0 "bibtex main"
-  "main.out" 1775519425 2890 9e96b53b5c73611828618715f5274ace "pdflatex"
-  "main.tex" 1775519424 21965 3220b015bcb8307e39c3630738b33f17 ""
+  "main.out" 1775519677 3351 885ac0f85de759ccb122cfdbe789695b "pdflatex"
+  "main.tex" 1775519676 22341 7cc2b29ff4604bdb98fcaf04a12289e5 ""
   (generated)
   "main.aux"
   "main.log"

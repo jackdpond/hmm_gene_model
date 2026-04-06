@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.29)  6 APR 2026 17:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.29)  6 APR 2026 17:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -324,72 +324,69 @@ Package caption Info: End \AtBeginDocument code.
 Class amsart Warning: Abstract should precede \maketitle in AMS document classes; reported on input line 30.
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (20.04034pt too wide) in paragraph at lines 78--79
+Underfull \vbox (badness 2608) has occurred while \output is active []
+
+ [2]
+Overfull \hbox (20.04034pt too wide) in paragraph at lines 84--85
  \OT1/cmr/m/n/10.95 3.1.\OT1/cmr/bx/n/10.95 Period Length Iden-ti-fi-ca-tion.[][] \OT1/cmr/m/n/10.95 We fit Gauss-ian Mix-ture Mod-els (GMMs)
  []
 
-[2]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [3]
-<figures/rough-cell-expression-cycles.png, id=93, 714.7503pt x 365.4453pt>
+[3]
+<figures/rough-cell-expression-cycles.png, id=105, 714.7503pt x 365.4453pt>
 File: figures/rough-cell-expression-cycles.png Graphic file (type png)
 <use figures/rough-cell-expression-cycles.png>
-Package pdftex.def Info: figures/rough-cell-expression-cycles.png  used on input line 120.
+Package pdftex.def Info: figures/rough-cell-expression-cycles.png  used on input line 126.
 (pdftex.def)             Requested size: 357.37428pt x 182.7222pt.
-<figures/rough-gmm-classes.png, id=95, 880.28876pt x 420.57124pt>
+<figures/rough-gmm-classes.png, id=107, 880.28876pt x 420.57124pt>
 File: figures/rough-gmm-classes.png Graphic file (type png)
 <use figures/rough-gmm-classes.png>
-Package pdftex.def Info: figures/rough-gmm-classes.png  used on input line 122.
+Package pdftex.def Info: figures/rough-gmm-classes.png  used on input line 128.
 (pdftex.def)             Requested size: 440.1433pt x 210.28511pt.
 
-Overfull \hbox (80.1433pt too wide) in paragraph at lines 122--123
+Overfull \hbox (80.1433pt too wide) in paragraph at lines 128--129
  [][] 
  []
 
-<figures/rough-periodic-gene.png, id=96, 408.3255pt x 339.669pt>
+<figures/rough-periodic-gene.png, id=108, 408.3255pt x 339.669pt>
 File: figures/rough-periodic-gene.png Graphic file (type png)
 <use figures/rough-periodic-gene.png>
-Package pdftex.def Info: figures/rough-periodic-gene.png  used on input line 131.
+Package pdftex.def Info: figures/rough-periodic-gene.png  used on input line 137.
 (pdftex.def)             Requested size: 163.3273pt x 135.86519pt.
-<figures/rough-periodic-normalized-gene.png, id=97, 427.1157pt x 352.6776pt>
+<figures/rough-periodic-normalized-gene.png, id=109, 427.1157pt x 352.6776pt>
 File: figures/rough-periodic-normalized-gene.png Graphic file (type png)
 <use figures/rough-periodic-normalized-gene.png>
-Package pdftex.def Info: figures/rough-periodic-normalized-gene.png  used on input line 132.
+Package pdftex.def Info: figures/rough-periodic-normalized-gene.png  used on input line 138.
 (pdftex.def)             Requested size: 170.84325pt x 141.06853pt.
-
-Overfull \hbox (22.52045pt too wide) in paragraph at lines 138--139
+[4]
+Overfull \hbox (22.52045pt too wide) in paragraph at lines 144--145
 \OT1/cmr/m/n/10.95 com-po-si-tion for each gene's time se-ries us-ing the mean- and variance-standardized
  []
 
-[4]
-Underfull \vbox (badness 1527) has occurred while \output is active []
-
- [5 <./figures/rough-cell-expression-cycles.png> <./figures/rough-gmm-classes.png>]
-<figures/rough-seasonal-clusters.png, id=109, 685.1196pt x 309.3156pt>
+[5 <./figures/rough-cell-expression-cycles.png> <./figures/rough-gmm-classes.png>]
+<figures/rough-seasonal-clusters.png, id=121, 685.1196pt x 309.3156pt>
 File: figures/rough-seasonal-clusters.png Graphic file (type png)
 <use figures/rough-seasonal-clusters.png>
-Package pdftex.def Info: figures/rough-seasonal-clusters.png  used on input line 143.
+Package pdftex.def Info: figures/rough-seasonal-clusters.png  used on input line 149.
 (pdftex.def)             Requested size: 342.55896pt x 154.65741pt.
  [6 <./figures/rough-periodic-gene.png> <./figures/rough-periodic-normalized-gene.png>] [7 <./figures/rough-seasonal-clusters.png>] [8]
 No file main.bbl.
 (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 9E96B53B5C73611828618715F5274ACE;2890.
+(rerunfilecheck)             Checksum: 885AC0F85DE759CCB122CFDBE789695B;3351.
  ) 
 Here is how much of TeX's memory you used:
- 11207 strings out of 480247
- 177333 string characters out of 5896151
- 460775 words of memory out of 5000000
- 28824 multiletter control sequences out of 15000+600000
+ 11213 strings out of 480247
+ 177423 string characters out of 5896151
+ 461778 words of memory out of 5000000
+ 28827 multiletter control sequences out of 15000+600000
  478399 words of font info for 62 fonts, out of 8000000 for 9000
  175 hyphenation exceptions out of 8191
- 69i,7n,76p,1354b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 69i,7n,76p,1363b,370s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on main.pdf (8 pages, 790972 bytes).
+Output written on main.pdf (8 pages, 791913 bytes).
 PDF statistics:
- 176 PDF objects out of 1000 (max. 8388607)
- 136 compressed objects within 2 object streams
- 28 named destinations out of 1000 (max. 500000)
- 154 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 189 PDF objects out of 1000 (max. 8388607)
+ 149 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 178 words of extra memory for PDF output out of 10000 (max. 10000000)
 
