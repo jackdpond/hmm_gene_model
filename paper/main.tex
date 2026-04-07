@@ -79,23 +79,23 @@ For all current analyses, which essentially include only clustering, we have use
 
 The paper we are building upon emphasized the periodic nature of many of the genes in the dataset. As such, our analysis included an independent verification of a suitable period length, a process to filter genes by periodicity, and additional analyses sought to better understand the periodic modules in our data.
 
-\subsection{Period Length Identification}
+% \subsection{Period Length Identification}
 
-We fit Gaussian Mixture Models (GMMs) to the full set of arcsinh-transformed gene expressions to identify clusters of co-expressed genes and to recover the underlying period of the yeast metabolic cycle.
+% We fit Gaussian Mixture Models (GMMs) to the full set of arcsinh-transformed gene expressions to identify clusters of co-expressed genes and to recover the underlying period of the yeast metabolic cycle.
 
-Approach 1: High-variance feature selection. A naive GMM fit on all 9,275 genes as features suffers from the curse of dimensionality ($n \ll d$), producing overconfident, nearly deterministic cluster assignments. To try to mitigate this, we discarded all but the $n$ highest variance genes (rows) and fit a 4-component GMM on all 36 time points. The intuition is that high-variance time points are the most discriminative for separating phases of the metabolic cycle. We swept $n$ from 200 to 1100 in steps of 100, observing that cluster assignments were stable and reflected a roughly cyclic sequence consistent with a ~300 s period, or three total periods in the experiment.
+% Approach 1: High-variance feature selection. A naive GMM fit on all 9,275 genes as features suffers from the curse of dimensionality ($n \ll d$), producing overconfident, nearly deterministic cluster assignments. To try to mitigate this, we discarded all but the $n$ highest variance genes (rows) and fit a 4-component GMM on all 36 time points. The intuition is that high-variance time points are the most discriminative for separating phases of the metabolic cycle. We swept $n$ from 200 to 1100 in steps of 100, observing that cluster assignments were stable and reflected a roughly cyclic sequence consistent with a ~300 s period, or three total periods in the experiment.
 
-However, even this large reduction did not produce real soft-clustering, as the assignments were still essentially deterministic. We decided to reduce to even less than ~200 dimensions.
+% However, even this large reduction did not produce real soft-clustering, as the assignments were still essentially deterministic. We decided to reduce to even less than ~200 dimensions.
 
-Approach 2: PCA + GMM on time steps. As a more principled dimensionality reduction, we projected the 9,275-gene feature space down to 5 principal components and fit a GMM with tied covariance on the reduced representation. The data were split temporally — the first 24 time points for training and the remaining 12 for testing — to avoid leakage. We selected the number of components $k \in {2, \ldots, 7}$ by evaluating held-out log-likelihood on the test set over 100 random restarts per $k$, finding $k = 4$ to be consistently well-supported. Predictions over the full 36-time-point sequence show a repeating cluster sequence, directly recovering the oscillation period.
+% Approach 2: PCA + GMM on time steps. As a more principled dimensionality reduction, we projected the 9,275-gene feature space down to 5 principal components and fit a GMM with tied covariance on the reduced representation. The data were split temporally — the first 24 time points for training and the remaining 12 for testing — to avoid leakage. We selected the number of components $k \in {2, \ldots, 7}$ by evaluating held-out log-likelihood on the test set over 100 random restarts per $k$, finding $k = 4$ to be consistently well-supported. Predictions over the full 36-time-point sequence show a repeating cluster sequence, directly recovering the oscillation period.
 
-Interestingly enough, even with an observation space of just 5 dimensions and a hidden state space of just 4, the assignments are still very high probability.
+% Interestingly enough, even with an observation space of just 5 dimensions and a hidden state space of just 4, the assignments are still very high probability.
 
-Additionally, we fit a GMM on the 200 highest variance genes and then projected to 2 principal components, and graphed the 36 time steps colored by their GMM assignment. There are 4 distinct clusters in 2 dimensions which are correctly discovered by the GMM in high dimensions.
+% Additionally, we fit a GMM on the 200 highest variance genes and then projected to 2 principal components, and graphed the 36 time steps colored by their GMM assignment. There are 4 distinct clusters in 2 dimensions which are correctly discovered by the GMM in high dimensions.
 
-Conclusions. The most important takeaway of the GMM clustering is the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 seconds. This knowledge will be used in further analysis methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
+% Conclusions. The most important takeaway of the GMM clustering is the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 seconds. This knowledge will be used in further analysis methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
 
-To do still. The selection of four hidden states is essentially arbitrary. While it seems to work well, the selection should be made more rigorous, perhaps via a grid search. We will also fit a GMMHMM for inference and prediction. The question of why soft-clustering still stands as well, and we will either successfully soft-cluster or explain why we cannot.
+% To do still. The selection of four hidden states is essentially arbitrary. While it seems to work well, the selection should be made more rigorous, perhaps via a grid search. We will also fit a GMMHMM for inference and prediction. The question of why soft-clustering still stands as well, and we will either successfully soft-cluster or explain why we cannot.
 
 \subsection{Periodic Gene Identification}
 Once an overall period length was identified, we used permutation testing on autocorrelation to identify which of the 9725 genes were oscillatory on that period. We computed the autocorrelation of the 36-timestep time series for each gene with delay equal to the optimal period length. We then randomized the order of the intensities in each time series 100 times and computed the autocorrelations of these time series. If the autocorrelation a true series was at the 95th percentile or greater relative to the randomized baseline, we accepted the gene as likely periodic and gave it a periodic label for downstream analyses. The other genes were rejected as non-periodic, since even significant numbers of randomized permutations of their time series had similar autocorrelations at the optimal period delay.
@@ -116,6 +116,24 @@ TODO: How should we incorporate a train/test split?
 %%Fourth Section
 \section{Results and Analysis} 
 % Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
+\subsection{Period Length Identification}
+
+We fit Gaussian Mixture Models (GMMs) to the full set of arcsinh-transformed gene expressions to identify clusters of co-expressed genes and to recover the underlying period of the yeast metabolic cycle.
+
+Approach 1: High-variance feature selection. A naive GMM fit on all 9,275 genes as features suffers from the curse of dimensionality ($n \ll d$), producing overconfident, nearly deterministic cluster assignments. To try to mitigate this, we discarded all but the $n$ highest variance genes (rows) and fit a 4-component GMM on all 36 time points. The intuition is that high-variance time points are the most discriminative for separating phases of the metabolic cycle. We swept $n$ from 200 to 1100 in steps of 100, observing that cluster assignments were stable and reflected a roughly cyclic sequence consistent with a ~300 s period, or three total periods in the experiment.
+
+However, even this large reduction did not produce real soft-clustering, as the assignments were still essentially deterministic. We decided to reduce to even less than ~200 dimensions.
+
+Approach 2: PCA + GMM on time steps. As a more principled dimensionality reduction, we projected the 9,275-gene feature space down to 5 principal components and fit a GMM with tied covariance on the reduced representation. The data were split temporally — the first 24 time points for training and the remaining 12 for testing — to avoid leakage. We selected the number of components $k \in {2, \ldots, 7}$ by evaluating held-out log-likelihood on the test set over 100 random restarts per $k$, finding $k = 4$ to be consistently well-supported. Predictions over the full 36-time-point sequence show a repeating cluster sequence, directly recovering the oscillation period.
+
+Interestingly enough, even with an observation space of just 5 dimensions and a hidden state space of just 4, the assignments are still very high probability.
+
+Additionally, we fit a GMM on the 200 highest variance genes and then projected to 2 principal components, and graphed the 36 time steps colored by their GMM assignment. There are 4 distinct clusters in 2 dimensions which are correctly discovered by the GMM in high dimensions.
+
+Conclusions. The most important takeaway of the GMM clustering is the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 seconds. This knowledge will be used in further analysis methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
+
+To do still. The selection of four hidden states is essentially arbitrary. While it seems to work well, the selection should be made more rigorous, perhaps via a grid search. We will also fit a GMMHMM for inference and prediction. The question of why soft-clustering still stands as well, and we will either successfully soft-cluster or explain why we cannot.
+
 
 \subsection{Period Length Identification}
 * a lot of this appears to be above in methods - we might move some of it down here*
