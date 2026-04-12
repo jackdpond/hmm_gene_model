@@ -1,0 +1,159 @@
+\documentclass[12pt]{beamer}
+
+% ─── Theme ───────────────────────────────────────────────────────────────────
+\usetheme{default}
+\usecolortheme{default}
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}          % remove nav bar
+\setbeamertemplate{footline}[frame number]        % page numbers only
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[default]
+
+% clean block style
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+% ─── Colors ──────────────────────────────────────────────────────────────────
+\definecolor{accent}{RGB}{30, 60, 120}            % dark navy
+\setbeamercolor{frametitle}{fg=accent}
+\setbeamercolor{title}{fg=accent}
+\setbeamercolor{structure}{fg=accent}
+\setbeamercolor{block title}{fg=white, bg=accent}
+\setbeamercolor{block body}{fg=black, bg=accent!8}
+
+% ─── Fonts ───────────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ─── Math ────────────────────────────────────────────────────────────────────
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{bm}                                   % bold math: \bm{}
+
+% ─── Figures & Tables ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{booktabs}                             % \toprule, \midrule, \bottomrule
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf, skip=4pt}
+
+% ─── Misc ────────────────────────────────────────────────────────────────────
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{appendixnumberbeamer}                 % restart page numbers at \appendix
+
+% ─── Title Info ──────────────────────────────────────────────────────────────
+\title{Your Presentation Title}
+\subtitle{Optional Subtitle}
+\author{Your Name}
+\institute{Your Institution}
+\date{\today}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── Title Slide ──────────────────────────────────────────────────────────────
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ── Outline ──────────────────────────────────────────────────────────────────
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Introduction}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{frame}{Motivation}
+  \begin{itemize}
+    \item First point goes here.
+    \item Second point goes here.
+    \item Third point goes here.
+  \end{itemize}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Methods}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{frame}{Model}
+  Let $X_1, \dots, X_n$ be observations. We assume
+  \[
+    X_i \mid \theta \;\overset{\text{iid}}{\sim}\; p(x \mid \theta),
+  \]
+  and place a prior $\pi(\theta)$ on the parameter of interest.
+
+  \medskip
+  The posterior is then
+  \[
+    \pi(\theta \mid x_1, \dots, x_n)
+      \;\propto\; \pi(\theta) \prod_{i=1}^{n} p(x_i \mid \theta).
+  \]
+\end{frame}
+
+\begin{frame}{Algorithm}
+  \begin{block}{Key Step}
+    Something important to highlight.
+  \end{block}
+
+  \medskip
+  \begin{enumerate}
+    \item Initialize parameters.
+    \item Iterate until convergence.
+    \item Report results.
+  \end{enumerate}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Results}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{frame}{Figure Example}
+  \begin{figure}
+    \centering
+    % \includegraphics[width=0.75\linewidth]{figures/your_figure.pdf}
+    \caption{A clear, descriptive caption.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Table Example}
+  \begin{table}
+    \centering
+    \caption{Comparison of methods.}
+    \begin{tabular}{lcc}
+      \toprule
+      Method    & Metric A & Metric B \\
+      \midrule
+      Baseline  & 0.82     & 0.75     \\
+      Proposed  & \textbf{0.91} & \textbf{0.88} \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Conclusion}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{frame}{Summary}
+  \begin{itemize}
+    \item We showed \dots
+    \item Future work includes \dots
+  \end{itemize}
+
+  \medskip
+  \begin{center}
+    \large Thank you!
+  \end{center}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% Appendix (slides here don't count toward the page total)
+% ─────────────────────────────────────────────────────────────────────────────
+\appendix
+
+\begin{frame}{Backup Slide}
+  Extra details that didn't fit in the main talk.
+\end{frame}
+
+\end{document}
