@@ -1,11 +1,11 @@
 # Fdb version 4
-["pdflatex"] 1776092426.2467 "/Users/jackson/Documents/GitHub/hmm_gene_model/slide_deck/slides.tex" "slides.pdf" "slides" 1776092427.82591 0
+["pdflatex"] 1776112493.15837 "/Users/jackson/Documents/GitHub/hmm_gene_model/slide_deck/slides.tex" "slides.pdf" "slides" 1776112494.66736 2
   "../paper/figures/rough-cell-expression-cycles.png" 1775528216.56583 199172 4b8c89ff879b4302bb6be0cffe509f3e ""
   "../paper/figures/rough-gmm-classes.png" 1775528216.56659 35572 55bcaccb50cebc530f57fd6c5863e404 ""
   "../paper/figures/rough-periodic-gene.png" 1775528216.56791 133159 531b053b000ddcf25b66c8828c136972 ""
   "../paper/figures/rough-periodic-normalized-gene.png" 1775528216.57031 267257 7483927e76cab6727e9871f280af3dfc ""
   "../paper/figures/rough-seasonal-clusters.png" 1775528216.57145 93722 420b544e56f9c3a651f03b770e91b57c ""
-  "/Users/jackson/Documents/GitHub/hmm_gene_model/slide_deck/slides.tex" 1776092426.02523 20498 cfef97aaaa05bf1f14bcf342e441ef13 ""
+  "/Users/jackson/Documents/GitHub/hmm_gene_model/slide_deck/slides.tex" 1776112491.35265 20296 ebc4345bc65aa53804250d39233c5c15 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1254269338 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc" 1202520719 3486 c7eadf5dcc57b3b2d11736679f6636ba ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc" 1202520719 2405 5dcf2c1b967ee25cc46c58cd52244aed ""
@@ -252,11 +252,11 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763482605 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "slides.aux" 1776092427.70898 5832 d0c9acc85f75b6049e59a954c9dc05c8 "pdflatex"
-  "slides.nav" 1776092427.71001 3711 ce0beceb5522651f47d7bf37724f380b "pdflatex"
-  "slides.out" 1776092427.7098 934 485816725f918c163507cb46994d121c "pdflatex"
-  "slides.tex" 1776092426.02523 20498 cfef97aaaa05bf1f14bcf342e441ef13 ""
-  "slides.toc" 1776092427.71004 331 5f1c79902d77c06e4d89fb740cd4e814 "pdflatex"
+  "slides.aux" 1776112494.5551 5832 d0c9acc85f75b6049e59a954c9dc05c8 "pdflatex"
+  "slides.nav" 1776112494.55628 3711 ce0beceb5522651f47d7bf37724f380b "pdflatex"
+  "slides.out" 1776112494.55605 934 485816725f918c163507cb46994d121c "pdflatex"
+  "slides.tex" 1776112491.35265 20296 ebc4345bc65aa53804250d39233c5c15 ""
+  "slides.toc" 1776112494.55632 331 5f1c79902d77c06e4d89fb740cd4e814 "pdflatex"
   (generated)
   "slides.aux"
   "slides.log"

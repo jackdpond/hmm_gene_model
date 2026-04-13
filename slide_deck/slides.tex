@@ -63,10 +63,7 @@
 
 \begin{frame}{The Yeast Metabolic Cycle}
   \begin{itemize}
-    \item \textit{Saccharomyces cerevisiae} (budding yeast) exhibits a
-          spontaneous, synchronized \textbf{metabolic oscillation} when grown in continuous culture.
-    \item The cycle is visible in O$_2$ consumption and spans distinct
-          respiratory and reductive phases.
+    \item \textit{Saccharomyces cerevisiae} (budding yeast) exhibits a spontaneous, synchronized \textbf{metabolic oscillation} when grown in continuous culture.
     \item Thousands of genes are expressed periodically, in groups called \textbf{temporal modules}
   \end{itemize}
 
@@ -81,16 +78,11 @@
 
 \begin{frame}{Dataset (maybe replace this slide with diagram)}
   \begin{itemize}
-    \item \textbf{Source:} Tu et al.\ (2005), \textit{Science} — publicly
-          available via GEO (GSM77298).
+    \item \textbf{Source:} Tu et al.\ (2005), \textit{Science} — publicly available via GEO (GSM77298).
     \item \textbf{Assay:} Yeast whole-transcriptome microarray.
-    \item \textbf{Features:} 9,725 RNA transcripts (6,400 annotated genes
-          + controls).
-    \item \textbf{Time points:} 36 samples at $\approx$25-minute intervals
-          ($\approx$15 hours total).
-    \item Each time point is an independent microarray chip measuring
-          relative transcript abundance across the \emph{same} oscillating
-          population.
+    \item \textbf{Features:} 9,725 RNA transcripts.
+    \item \textbf{Time points:} 36 samples at $\approx$25-minute intervals ($\approx$15 hours total).
+    \item Each time point is an independent microarray chip measuring relative transcript abundance across the \emph{same} oscillating population.
   \end{itemize}
 \end{frame}
 
@@ -104,8 +96,7 @@
   \medskip
   \begin{enumerate}
     \item \textbf{Per-chip median normalization.}
-          Each chip is divided by its median intensity, removing global
-          staining and loading differences between arrays.
+          Each chip is divided by its median intensity, removing global staining and loading differences between arrays.
           \begin{itemize}
             \item Assumption: true median expression is constant across time.
             \item Result: \emph{relative} (not absolute) expression.
@@ -116,11 +107,10 @@
           \[
             \tilde{x} = \operatorname{arcsinh}(x) = \ln\!\bigl(x + \sqrt{x^2+1}\bigr)
           \]
+          % \includegraphics[width=0.46\linewidth]{../src/code/arcsinh_figure.png}
 
     \item \textbf{Per-gene $z$-score} (for clustering only).
-          Each gene's time series is standardized to zero mean and unit
-          variance so genes with very different baseline expressions are
-          comparable.
+          Each gene's time series is standardized to zero mean and unit variance so genes with very different baseline expressions are comparable.
   \end{enumerate}
 \end{frame}
 
@@ -130,23 +120,19 @@
 
 \begin{frame}{Approach: Clustering Time Points}
   \begin{block}{Key Insight}
-    If the metabolic cycle has period $T$, time points separated by $T$
-    should look alike — they should fall in the \emph{same cluster}.
+    If the metabolic cycle has period $T$, time points separated by $T$ should look alike — they should fall in the \emph{same cluster}.
   \end{block}
 
   \medskip
-  \textbf{Strategy:} Cluster the 36 \emph{time points} (not genes) using a
-  Gaussian Mixture Model (GMM), then read off the period from the repeating
-  cluster sequence.
+  \textbf{Strategy:} Cluster the 36 \emph{time points} (not genes) using a Gaussian Mixture Model (GMM), then read off the period from the repeating cluster sequence.
 
   \medskip
   \textbf{Dimensionality reduction} (necessary — $n=36 \ll d=9725$):
   \begin{itemize}
     \item Approach 1: Keep top-$n$ highest-variance genes, sweep $n \in
           [200, 1100]$.
-    \item Approach 2: Project all genes to 5 PCA components; select $k$ by
-          held-out log-likelihood (first 24 train, last 12 test).
-    \item Both approaches consistently recover $k=4$ clusters.
+    \item Approach 2: Project all genes to 5 PCA components; select $k$ by held-out log-likelihood (first 24 train, last 12 test).
+    \item Both approaches recover $k=4$ clusters.
   \end{itemize}
 \end{frame}
 
@@ -164,8 +150,7 @@
 
 \begin{frame}{Period Discovery — Summary}
   \begin{itemize}
-    \item Every dimensionality-reduction and GMM variant converged to a
-          \textbf{12-timestep period}.
+    \item Every dimensionality-reduction and GMM variant converged to a \textbf{12-timestep period}.
     \[
       T = 12 \times 25\,\text{min} = 300\,\text{min}
     \]
@@ -194,8 +179,7 @@
   \end{enumerate}
 
   \medskip
-  \textbf{Result:} 5,243 of 9,725 genes ($\approx$54\%) are identified as
-  periodic at lag 12.
+  \textbf{Result:} 5,243 of 9,725 genes ($\approx$54\%) are identified as periodic at lag 12.
 \end{frame}
 
 \begin{frame}{Periodic vs.\ Non-Periodic Genes in PCA}
@@ -205,9 +189,7 @@
     \hfill
     \includegraphics[width=0.46\linewidth]{../paper/figures/rough-periodic-normalized-gene.png}
     \caption{PCA of all 9,725 genes across 36 timesteps. Left: arcsinh
-             expression (PC1 captures mean expression level). Right: After
-             per-gene $z$-score normalization, periodic and non-periodic genes
-             separate clearly in both PCs.}
+             expression (PC1 captures mean expression level). Right: After per-gene $z$-score normalization, periodic and non-periodic genes separate clearly in both PCs.}
   \end{figure}
 \end{frame}
 
@@ -375,7 +357,8 @@
   \bigskip
   \small
   \textbf{Data:} Tu et al.\ (2005) \textit{Science}, GEO accession GSM77298.\\
-  \textbf{Code:} \texttt{github.com/[your-repo]}
+  \textbf{Code:} \texttt{https://github.com/jackdpond/hmm_gene_model}
+  
 \end{frame}
 
 % ─────────────────────────────────────────────────────────────────────────────
