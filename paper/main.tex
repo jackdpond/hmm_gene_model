@@ -108,6 +108,8 @@ Once an overall period length was identified, we used permutation testing on aut
 
 Once a suitable overall period and individual periodic genes were identified, we used classical time series analysis to investigate the periodic genes specifically in more depth. We obtained the classical time series decomposition of each individual gene via moving averages over the 24 central time steps (as moving average requires rejecting timesteps at the beginning and end), and then clustered the seasonal components identified across these 24 timesteps using GMMs optimized for cluster count by inspecting the AIC and BIC curves. We then inspected the individual clusters in more depth through visualization.
 
+Note that here we cluster \textit{genes}, whereas earlier we clustered \textit{time steps}. 
+
 TODO: Semantic Evaluation of Clusters via AI model
 
 TODO: How should we incorporate a train/test split?
