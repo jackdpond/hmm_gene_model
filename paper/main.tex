@@ -115,13 +115,6 @@ TODO: How should we incorporate a train/test split?
 \subsection{ARMA}
 We attempt to fit the data to an ARIMA model. Largely, these efforts are unsuccessful. While we can fit individual genes as ARMA models, efforts to include interactions between genes failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results. We attribute this result to the inherent periodicity in our data. Periodic data requires a nonlinear fit, while ARMA models require a linear relationship between the past and the present. 
 
-
-\subsection{Other analyses?}
-
-
-%%Fourth Section
-\section{Results and Analysis} 
-% Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
 \subsection{Period Length Identification}
 Conclusions. The most important takeaway of the GMM clustering is the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 seconds. This knowledge will be used in further analysis methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
 
@@ -170,6 +163,12 @@ We also attempt to discover hidden states using a Continuous Density Hidden Mark
     \includegraphics[scale=0.5]{figures/cdhmm_states.png}
     The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.
 \end{figure}
+
+
+%%Fourth Section
+\section{Results and Analysis} 
+% Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
+
 %%Fifth Section
 \section{Ethical Implications and Conclusions}
 % Thoughtfully analyze the ethical implications of your research questions, the data you gathered, and the analysis that was performed.  Are there privacy or other implications from the collection or use of the data?  Could your results and methods be misused or misunderstood?  What can and should be done to prevent misuse and misunderstanding?  Could your algorithms and methods result in a destructive self-fulfilling feedback loop?  How could that be prevented or controlled?  What other ethical implications does your work have?  
