@@ -112,18 +112,22 @@ Note that here we cluster \textit{genes}, whereas earlier we clustered \textit{t
 
 TODO: Semantic Evaluation of Clusters via AI model
 
-TODO: How should we incorporate a train/test split?
-
 \subsection{ARMA}
 We attempt to fit the data to an ARIMA model. Largely, these efforts are unsuccessful. While we can fit individual genes as ARMA models, efforts to include interactions between genes failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results. We attribute this result to the inherent periodicity in our data. Periodic data requires a nonlinear fit, while ARMA models require a linear relationship between the past and the present. 
 
+\subsection{Continuous Density Hidden Markov Model}
+We also attempt to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then use
+\textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states show robust periodicity.
+\begin{figure}
+    \includegraphics[scale=0.5]{figures/cdhmm_states.png}
+    The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.
+\end{figure}
+
+%%Fourth Section
+\section{Results and Analysis} 
+% Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
 \subsection{Period Length Identification}
 Conclusions. The most important takeaway of the GMM clustering is the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 seconds. This knowledge will be used in further analysis methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
-
-\subsection{Period Length Identification}
-* a lot of this appears to be above in methods - we might move some of it down here*
-
-... a period of 12 timesteps, corresponding to $25 \times 12 = 300$ minutes, was the clear choice in all cases.
 
 \begin{figure}
     \includegraphics[scale=0.5]{figures/rough-cell-expression-cycles.png}
@@ -155,21 +159,6 @@ Visualization of the seasonal components of normalized expression by cluster rev
 \end{figure}
 
 \subsection{ARMA}
-
-\subsection{Other analyses?}
-
-\subsection{Continuous Density Hidden Markov Model}
-We also attempt to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then use
-\textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states show robust periodicity.
-\begin{figure}
-    \includegraphics[scale=0.5]{figures/cdhmm_states.png}
-    The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.
-\end{figure}
-
-
-%%Fourth Section
-\section{Results and Analysis} 
-% Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
 
 %%Fifth Section
 \section{Ethical Implications and Conclusions}
