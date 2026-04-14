@@ -16,7 +16,7 @@
 %%% WARNING: Do NOT change the page size, fonts, or margins!  Penalties will apply.
 %%% WARNING: Do NOT change the page size, fonts, or margins!  Penalties will apply.
 
-\title{Illuminating a High Dimensional Biological Cycle}
+\title{Temporal Structure in Yeast Transcriptome}
 \author{Jackson Pond, Isaac Smith, Henry Tullis, Wyatt Wimmer}
 
 % Change the date to match the date you actually wrote this paper
@@ -29,6 +29,8 @@
 
 \begin{abstract}
 % Place abstract here. The abstract summarizes in one paragraph the main question, results, and conclusions drawn from your investigation.  
+$\textit{Saccharomyces cerevisiae}$, or budding yeast, exhibits a spontaneous, synchronized metabolic oscillation when grown in a continuous culture. Here, we use time series data derived from sampling ambient mRNA in a $\textit{s. cerecisiae}$ culture
+to determine the period of budding yeast's metabolic cycle and its phases. We also investigate which genes drive each phase and which biological processes those genes represent. We show that extensive analysis of biologically derived data can yield valuable insights about various biological mechanisms.
 \end{abstract}
 
 %% First Section
@@ -41,7 +43,7 @@ The advent of genome-wide transcriptomics unveiled hitherto untapped reservoirs 
 these extensive transcriptomic datasets thus becomes an important challenge in obtaining a better understanding of cellular life.
 
 The scale and dimensionality of transciptome data are extreme. At any given moment, a cell may be expressing several thousand genes, and the number of transcripts in a cell's transcriptome is likely in the hundreds of thousands. Clever and robust data analysis techniques must be effectively deployed in order to coax out biologically realistic trends from such high-dimensional data and noise. In this paper, we attempt to 
-apply several data dimension reduction and analysis techniques on a buddying yeast $\textit{Saccharomyces Cerecisiae}$ transcriptome dataset. These data, which consist of a total RNA transcriptome of a budding yeast cell prepared at ~25 minute intervals, provide insight into how the transcriptome of yeast changes temporally. Specifically, our analysis attempts to use various techniques to determine the period of respiratory bursts in a synchronized yeast population's metabolic cycle and to determine which genes 
+apply several data dimension reduction and analysis techniques on a $\textit{saccharomyces cerecisiae}$, or buddying yeast, transcriptome dataset. These data, which consist of a total RNA transcriptome of a budding yeast cell prepared at ~25 minute intervals, provide insight into how the transcriptome of yeast changes temporally. Specifically, our analysis attempts to use various techniques to determine the period of respiratory bursts in a synchronized yeast population's metabolic cycle and to determine which genes 
 are expressed during the various phases of the metabolic cycle. Our investigation parses through a comlex transcriptomic dataset to provide insights into the specific cellular mechanisms of yeast metabolism, but also highlights advantages and drawbacks of various data analysis techniques on a high-dimensional, periodic dataset.
 
 %%Second Section
@@ -173,7 +175,13 @@ Visualization of the seasonal components of normalized expression by cluster rev
 
 \subsection{Other analyses?}
 
-
+\subsection{Continuous Density Hidden Markov Model}
+We also attempt to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then use
+\textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states show robust periodicity.
+\begin{figure}
+    \includegraphics[scale=0.5]{figures/cdhmm_states.png}
+    The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.
+\end{figure}
 %%Fifth Section
 \section{Ethical Implications and Conclusions}
 % Thoughtfully analyze the ethical implications of your research questions, the data you gathered, and the analysis that was performed.  Are there privacy or other implications from the collection or use of the data?  Could your results and methods be misused or misunderstood?  What can and should be done to prevent misuse and misunderstanding?  Could your algorithms and methods result in a destructive self-fulfilling feedback loop?  How could that be prevented or controlled?  What other ethical implications does your work have?  
