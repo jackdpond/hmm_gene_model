@@ -111,6 +111,8 @@ TODO: Semantic Evaluation of Clusters via AI model
 TODO: How should we incorporate a train/test split?
 
 \subsection{ARMA}
+We attempt to fit the data to an ARIMA model. Largely, these efforts are unsuccessful. While we can fit individual genes as ARMA models, efforts to include interactions between genes failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results. We attribute this result to the inherent periodicity in our data. Periodic data requires a nonlinear fit, while ARMA models require a linear relationship between the past and the present. 
+
 
 \subsection{Other analyses?}
 
