@@ -98,11 +98,11 @@ Additionally, as a sanity check, we fit a GMM on the 200 highest variance genes 
 
 \textbf{Approach 3. Continuous Density Hidden Markov Model.} We also attempt to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then use
 \textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states show robust periodicity.
-\begin{figure}
-    \includegraphics[scale=0.5]{figures/redone_metabolic_state.png}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.99\textwidth]{figures/redone_metabolic_state.png}
     \caption{The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.}
 \end{figure}
-
 \subsection{Periodic Gene Identification}
 Once an overall period length was identified, we used permutation testing on autocorrelation to identify which of the 9725 genes were oscillatory on that period. We computed the autocorrelation of the 36-timestep time series for each gene with delay equal to 12 time steps, as discovered the previous section. We called these values the \textit{true series autocorrelation} for each gene. We then randomized the order of the intensities in each time series 100 times and computed the autocorrelations of these shuffled time series. If the true series autocorrelation was at the 95th percentile or greater relative to the randomized baseline, we accepted the gene as likely periodic and labeled it accordingly for downstream analyses. The other genes were rejected as non-periodic, since even significant numbers of randomized permutations of their time series had similar autocorrelations at the optimal period delay.
 
