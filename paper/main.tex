@@ -63,12 +63,12 @@ Our dataset consists of a sequence of yeast microarray assays. Each microarray w
 \subsection{Preprocessing}
 Individual microarrays are subject to variability due to variations in staining and other experimental parameters. We median-normalized intensity values for each microarray as indicated by \cite{Tu2005} to reduce noise-based differences between the microarrays' distributions of expression intensities. This preprocessing step was a standard practice at the time of this publication. However, it restricts our use of the normalized data to relative comparisons, not absolute comparisons, about intensities of the each gene across timesteps.
 
-The means and variances of each of the transcripts occupy many orders of magnitude, with higher mean intensity corresponding to higher variance in expression. To attempt to 'stabilize' the variance of our time series across varying mean intensities, we took an $\text{arcsinh}$ transformation of all intensity values. Using arcsinh functions is standard practice in transcriptomics, similar to log-transforming data but with better handling of zero, which is a common value in transcriptomic data. It should be noted that applying or even learning an affine transformation to the data first can enhance the variance stabilization effect of arcsinh \cite{Huber2002}. In our case, visual inspection of the data confirmed that the data variances were more comparable than before and we decided to proceed without that additional step.
+The means and variances of each of the transcripts occupy many orders of magnitude, with higher mean intensity corresponding to higher variance in expression. To attempt to 'stabilize' the variance of our time series across varying mean intensities, we took an $\text{arcsinh}$ transformation of all intensity values. Using arcsinh functions is standard practice in transcriptomics, similar to log-transforming data but with better handling of zero, which is a common value in transcriptomic data. It should be noted that applying or even learning an affine transformation to the data first can enhance the variance stabilization effect of arcsinh \cite{Huber2002}. In our case, visual inspection of the data confirmed that the time series' variances were more comparable than before and we decided to proceed without that additional step.
 
 The arcsinh-normalized data was used for our analyses that require comparing relative expression intensities of different genes, but for our analyses that compare the temporal expression patterns, we decided to also standardize the the arcsinh-transformed relative intensities of each gene via a Z-score across each individual time series. Normalizing by Z-score allows us to identify transcripts with similarly timed peaks and troughs in relative expression, even when those transcripts have different means and variances in arcsinh relative intensity.
 
 \subsection{Train-test Split}
-Our analyses can essentially be split into two types--clustering and time series forecasting. For clustering analyses, we use the entire dataset, except to ascertain optimal parameters. For forecasting analyses, we split the dataset according to the period discovered in the clustering analyses, which is 12 timesteps. For all splits, we use the first two periods (24 time steps) for training and the third period (the last 12 time steps) for the test set.
+Our data involves a relatively small number of time points. For some analyses such as clustering, we used the entire dataset because evaluation was accomplished visual inspection, etc. In one case, we applied a train test split useing the first two periods (24 time steps) for training and the third period (the last 12 time steps) for the testing set. The forecasting we attempted would have also used this train test split.
 
 %% Third Section
 \section{Methods} 
@@ -78,11 +78,11 @@ Our analyses can essentially be split into two types--clustering and time series
 
 % The paper we are building upon emphasized the periodic nature of many of the genes in the dataset. As such, our analysis included an independent verification of a suitable period length, a process to filter genes by periodicity, and additional analyses sought to better understand the periodic modules in our data.
 
-Our anlysis seeks to answer two basic questions: (1) What is the temporal structure of the transcriptomic data (i.e. what is the period, what are the distinct phases)? And (2) which genes drive each phase and what biological processes to they represent?
+Our anlysis seeks to answer two basic questions: (1) What is the transcriptomic structure of the observed metabolic oscillations (i.e. what is the period, what are the distinct phases)? And (2) what is the biological interpretation of this structure?
 
 \subsection{Period Length Discovery}
 
-Yeast is known to exhibit periodic behavior under the experimental treatment we describe. Specifcally, it undergoes a metabolic cycle over several hours. We expected that this metabolic cylce would have distinct \textit{phases} that repeat in order, identifiable by the groups of co-expressed genes that characterize them. We fit Gaussian Mixture Models (GMMs) to the full set of arcsinh-transformed gene expressions to identify clusters of co-expressed genes and to recover the phases and underlying period of the yeast metabolic cycle.
+We expected that the metabolic cylce would have distinct \textit{phases} that repeat in order, identifiable by the groups of co-expressed genes that characterize them. However, the large number of genes made individual time series hard to study. We fit Gaussian Mixture Models (GMMs) to the full set of arcsinh-transformed gene expressions to cluster the 36 timesteps by their expression values and thereby recover the phases and underlying period of the yeast metabolic cycle.
 
 \textbf{Approach 1: High-variance feature selection.} A naive GMM fit on all 9,275 genes as features suffers from the curse of dimensionality ($n \ll d$), producing overconfident, nearly deterministic cluster assignments. To mitigate this, we discarded all but the $n$ highest variance genes (rows) and fit a 5-component GMM on all 36 time points. The intuition is that high-variance time points are the most discriminative for separating phases of the metabolic cycle. We swept $n$ from 200 to 1100 in steps of 100, observing that cluster assignments were stable regardless of $n$ and reflected a neatly cyclic sequence consistent with a ~300 s period, or three total periods in the experiment.
 
@@ -92,30 +92,55 @@ However, even this large reduction did not produce real soft-clustering, as the 
 
 In order to ascertain the best number $k$ of clusters, we split the data temporally — the first 24 time points for training and the remaining 12 for testing — to avoid leakage. We selected the number of components $k \in {2, \ldots, 7}$ by evaluating held-out log-likelihood on the test set over 100 random restarts per $k$, finding $k = 5$ to be consistently well-supported. 
 
-Predictions over the full 36-time-point sequence with $k=5$ show a repeating cluster sequence, directly recovering the oscillation period. Interestingly enough, even with an observation space of just 5 dimensions and a hidden state space of just 5, the assignments are still very high probability, indicating high separability.
+Predictions over the full 36-time-point sequence with $k=5$ show a pattern in cluster sequence, confirming a 300s (12 timestep) oscillation period (Figure \ref{fig:gmm}A). Interestingly enough, even with an observation space of just 5 dimensions and a hidden state space of just 5, the assignments are still very high probability, indicating high separability.
 
-Additionally, as a sanity check, we fit a GMM on the 200 highest variance genes and then projected to 2 principal components, and graphed the 36 time steps colored by their GMM assignment. There are 5 distinct clusters in 2 dimensions which are correctly discovered by the GMM in high dimensions. Plotting a line connecting the time-points in order reveals the looping, periodic nature of the data.
+Additionally, as a sanity check, we fit a GMM on the 200 highest variance genes and then projected to 2 principal components, and graphed the 36 time steps colored by their GMM assignment. There are 5 distinct clusters in 2 dimensions which are correctly discovered by the GMM in 200 dimensional space. Plotting a line connecting the time-points in order reveals the looping, periodic nature of the data (Figure \ref{fig:gmm}B).
 
-\textbf{Approach 3. Continuous Density Hidden Markov Model.} We also attempt to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then use
-\textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states show robust periodicity.
+\begin{figure}
+    \includegraphics[scale=0.5]{figures/rough-gmm-classes.png}
+
+    \includegraphics[scale=0.5]{figures/rough-cell-expression-cycles.png}
+
+    \caption{A (top): GMM cluster assignments over time--the 12-time-step period is clear. B (bottom): Projection to two principal components of 200-dimensional time-steps, colored by GMM assignment and connected in order. The clusters and cycle are clear.}
+
+    \label{fig:gmm}
+\end{figure}
+
+\textbf{Approach 3. Continuous Density Hidden Markov Model.} We also attempted to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then used
+\textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states shows robust periodicity (Figure \ref{fig:cdhmm}).
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.99\textwidth]{figures/redone_metabolic_state.png}
-    \caption{The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.}
+    \caption{The hidden states predicted by a CDHMM approach over the course of the metabolic cycle also support an overall 12-timestep periodicity.}
+    \label{fig:cdhmm}
 \end{figure}
+
 \subsection{Periodic Gene Identification}
-Once an overall period length was identified, we used permutation testing on autocorrelation to identify which of the 9725 genes were oscillatory on that period. We computed the autocorrelation of the 36-timestep time series for each gene with delay equal to 12 time steps, as discovered the previous section. We called these values the \textit{true series autocorrelation} for each gene. We then randomized the order of the intensities in each time series 100 times and computed the autocorrelations of these shuffled time series. If the true series autocorrelation was at the 95th percentile or greater relative to the randomized baseline, we accepted the gene as likely periodic and labeled it accordingly for downstream analyses. The other genes were rejected as non-periodic, since even significant numbers of randomized permutations of their time series had similar autocorrelations at the optimal period delay.
+Once an overall 12-timestep period length was identified, we used permutation testing to identify which of the 9725 transcripts were oscillatory on that period. We computed the autocorrelation of each transcript's time series with delay equal to the period length (12 timesteps). We called these values the \textit{true series autocorrelation} for each gene. We then randomized the order of the intensities in each time series 100 times and computed the lag-12 autocorrelations of these shuffled time series. If the absolute value of the true series autocorrelation was at the 95th percentile or greater relative to the absolute values of the randomized series, we accepted the gene as likely periodic and labeled it accordingly for downstream analyses. The other genes were rejected as non-periodic on the 12-timestep period, since significant numbers of randomized permutations of their time series had similar lag-12 autocorrelations.
+
+We used PCA to visualize the distributions of expression patterns between the periodic and non-periodic genes. Our visualizations on the arcsinh-transformed relative intensities (Figure \ref{fig:periodicpca}A) appears consistent with the hypothesis that that both periodic and non-periodic genes can be found with wide ranges of average expression levels (appears consistent with PC1), while periodic genes otherwise vary more in the temporal modlulation of expression profiles than the non-periodic genes (appears consistent with PC2). To remove the variation in average expression between genes from the visualization, we also visualized the time-relativized (Z-scored) expressions with PCA (Figure \ref{fig:periodicpca}B), finding that in two dimensions, the time-relativized periodic time series tend to a wider distribution than the non-periodic genes, surrounding them with a disc or annulus-like shape.
+
+\begin{figure}
+    \includegraphics[scale=0.4]{figures/rough-periodic-gene.png}
+    \includegraphics[scale=0.4]{figures/rough-periodic-normalized-gene.png}
+    \caption{Distributional differences in the time series of periodic and non-periodic genes. A (left): A PCA plot of individual transcripts by their arcsinh-transformed relative intensities across timesteps. B (right): A similar plot, using the time-relativized (Z-scored) versions of those values.}
+
+    \label{fig:periodicpca}
+\end{figure}
 
 \subsection{Classical Time Series Analysis}
-Once a suitable overall period and individual periodic genes were identified, we used classical time series analysis to investigate the periodic genes specifically in more depth. We obtained the classical time series decomposition of each individual gene via moving averages over the 24 central time steps (as moving average requires rejecting timesteps at the beginning and end), and then clustered the seasonal components identified across these 24 timesteps using GMMs optimized for cluster count by inspecting the AIC and BIC curves. We then inspected the individual clusters in more depth through visualization.
+Once a suitable overall period and individual periodic genes were identified, we used classical time series analysis to investigate the periodic genes specifically in more depth. We obtained the classical time series decomposition the arcsinh-transformed data for each individual gene via centered moving averages over the 24 central time steps (as the moving average requires timesteps at the beginning and end of the time series). We then Z-scored the seasonal components for each transcript across time points in that transcript's seasonal component. We clustered these Z-scored seasonal components used GMMs of varying cluster counts, finding 8 clusters to minimize the BIC values. We then inspected the individual transcript clusters in more depth through visualization.
 
-Note that here we cluster \textit{genes}, whereas earlier we clustered \textit{time steps}. The time-step clustering recovered period-length, and the gene clustering recovered distinct temporal modules of co-expressed genes.
+Note that here we cluster \textit{transcripts}, whereas earlier we clustered \textit{time steps}. The time-step clustering recovered period-length, and the transcript clustering recovered distinct temporal modules of co-expressed transcripts.
+
+\subsection{ARIMA}
+We attempted to fit the data to an ARMA model. Largely, these efforts are unsuccessful. While we can fit individual genes as ARMA models, efforts to include interactions between genes failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results. We attribute this result to the inherent periodicity in our data. This violates ARMA's assumption of a covariance stationary time series (the expected value of the time series is different at different time steps). In our case, first and second differencing (ARIMA) did not eliminate the problems, which makes sense because the trend was not linear or quadratic but oscillatory. Some literature search showed that seasonal differencing could be an appropriate solution for future work \cite{rob_j_hyndman_forecasting_2026}.
 
 \subsection{Semantic Cluster Evaluation}
 \textbf{TODO: Semantic Evaluation of Clusters via AI model}
 
-\subsection{ARMA}
-We attempted to fit the data to an ARIMA model. Largely, these efforts are unsuccessful. While we can fit individual genes as ARMA models, efforts to include interactions between genes failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results. We attribute this result to the inherent periodicity in our data. Periodic data requires a nonlinear fit, while ARMA models require a linear relationship between the past and the present. 
+
 
 %%Fourth Section
 \section{Results and Analysis} 
@@ -124,20 +149,11 @@ We first performed GMM clustering and fit a CDHMM across the time steps. The key
 
 The 300-minute period matches prior estimates of this particular metabolic process well, and our work independently verifies the period recovered by Tu et al.\ \cite{Tu2005}. We use knowledge of the period in downstream methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
 
-\begin{figure}
-    \includegraphics[scale=0.5]{figures/rough-cell-expression-cycles.png}
 
-    \includegraphics[scale=0.5]{figures/rough-gmm-classes.png}
-    \caption{Left: Projection to two principal components of 200-dimensional time-steps, colored by GMM assignment and connected in order. The clusters and cycle are clear. Right: GMM cluster assignments over time--the 12-time-step period is clear.}
-\end{figure}
 
 Armed with a knowledge of the period of the metabolic cycle, we can ask which genes oscillate, and when. We performed permutation testing to identify the genes with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the genes - over half of all genes - were identified as periodic with the 12 timestep period. Dimensionality reduction via PCA and visualization showed a clear difference in the distributions of periodic and non-periodic genes.
 
-\begin{figure}
-    \includegraphics[scale=0.4]{figures/rough-periodic-gene.png}
-    \includegraphics[scale=0.4]{figures/rough-periodic-normalized-gene.png}
-    \caption{Distributional differences in the time series of periodic and non-periodic genes. [TODO: Cleanup and add better labels] After using autocorrelation and permutation testing to determine which genes were periodic, we used dimensionality reduction to visualize the genes. Left: Principal Component Analysis visualization of the arcsinh-transformed expression values for each gene across the 36 timesteps. It appears that the first principal component represents something similar to average arcsinh expression across timesteps, which makes sense because arcsinh does not remove the massive differences in average expression (just rescales them). Right: Same values but normalized via a StandardScaler applied to each time series individually. Now all genes have the same mean expression, and the distributions of periodic and non-periodic genes are significantly different in both principal components.}
-\end{figure}
+
 
 After extracting the seasonal decomposition for each gene's time series using the mean- and variance-standardized data, we clustered these seasonal components, again using GMM clustering. We chose to use eight clusters, because this minimized the BIC and gave a local minima in the AIC.
 
