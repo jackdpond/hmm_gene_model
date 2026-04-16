@@ -29,8 +29,8 @@
 
 \begin{abstract}
 % Place abstract here. The abstract summarizes in one paragraph the main question, results, and conclusions drawn from your investigation.  
-$\textit{Saccharomyces cerevisiae}$, or budding yeast, exhibits a spontaneous, synchronized metabolic oscillation when grown in a continuous culture. Here, we use time series data derived from sampling ambient mRNA in a $\textit{s. cerecisiae}$ culture
-to determine that the period of budding yeast's metabolic cycle is 5 hours, and we distinguish the phases of the cycle. We also investigate which genes drive each phase and which biological processes those genes represent.
+$\textit{Saccharomyces cerevisiae}$, or budding yeast, can undergo spontaneous, synchronized metabolic oscillation when grown in a continuous culture. Here, we use time series data derived from sampling ambient mRNA in a $\textit{s. cerecisiae}$ culture
+to determine that the period of budding yeast's metabolic cycle is 5 hours, and we distinguish components of the cycle. We also investigate which genes drive each component and interpret our findings with the help of gene annotation data.
 \end{abstract}
 
 %% First Section
@@ -39,12 +39,9 @@ to determine that the period of budding yeast's metabolic cycle is 5 hours, and 
 
 % Make a clear case for why your question is interesting, well thought out, precisely formulated, and answerable, at least in principle, with adequate data and the techniques of machine learning.
 % Also briefly review, with proper citations \cite{Vandermeersch}, what is already known about the research questions and what techniques others have used to study these questions. Explain the scope of the project and how it fits into existing research. 
-The advent of genome-wide transcriptomics unveiled hitherto untapped reservoirs of vast biological data. These data - namely RNA transcripts produced within the cellular environment - provide direct insight into the mechanisms of cellular life and function. Analyzing and understanding trends and patterns within
-these extensive transcriptomic datasets thus becomes an important challenge in obtaining a better understanding of cellular life.
+Transcriptomic tools measure the transcriptome, the subset of the genome (the set of a cell's DNA) being transcribed into RNA at any given time \cite{caudai_ai_2021}. While individual cell's genomes are generally static, the transcriptome is dynamic, illuminating internal mechanisms that drive the dance of life. Even in simple eukaryotes like yeast, transcriptomic data are high dimensional, stochastic, and variable between individual cells \cite{nadal-ribelles_sensitive_2019}.
 
-The scale and dimensionality of transciptome data are extreme. At any given moment, a cell may be expressing several thousand genes, and the number of transcripts in a cell's transcriptome is likely in the hundreds of thousands. Clever and robust data analysis techniques must be effectively deployed in order to coax out biologically realistic trends from such high-dimensional data and noise. In this paper, we attempt to 
-apply several data dimension reduction and analysis techniques on a $\textit{saccharomyces cerecisiae}$, or budding yeast, transcriptome dataset. These data, which consist of a total RNA transcriptome of a budding yeast cell prepared at ~25 minute intervals, provide insight into how the transcriptome of yeast changes temporally. Specifically, our analysis attempts to use various techniques to determine the period of respiratory bursts in a synchronized yeast population's metabolic cycle and to determine which genes 
-are expressed during the various phases of the metabolic cycle. Our investigation parses through a complex transcriptomic dataset to provide insights into the specific cellular mechanisms of yeast metabolism, but also highlights advantages and drawbacks of various data analysis techniques on a high-dimensional, periodic dataset.
+In this paper, we use a time series transcriptomic dataset \cite{Tu2005} to investigate a yeast population undergoing spontaneous, synchronized metabolic oscillations. We independently determine the period of the metabolic cycle and identify distinct transcriptional components involved in the cycle. We also interpret these components using text annotations on each distinct transcript measured. Our investigation validates conclusions by \cite{Tu2005} and provides new insights, while highlighting advantages and drawbacks of various data analysis techniques on this high-dimensional, periodic dataset.
 
 %%Second Section
 \section{Data} 
