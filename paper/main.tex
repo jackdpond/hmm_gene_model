@@ -99,7 +99,7 @@ Additionally, as a sanity check, we fit a GMM on the 200 highest variance genes 
 \textbf{Approach 3. Continuous Density Hidden Markov Model.} We also attempt to discover hidden states using a Continuous Density Hidden Markov Model (CDHMM) approach. We using PCA on our \textit{arcsin} normalized dataset to capture the directions of highest variance, and then use
 \textit{GaussianHMM} method from the \textit{hiddenhmm} package on the transformed data to compute the hidden states. A CDHMM approach using 5 states show robust periodicity.
 \begin{figure}
-    \includegraphics[scale=0.5]{figures/cdhmm_states.png}
+    \includegraphics[scale=0.5]{figures/redone_metabolic_state.png}
     \caption{The hidden states predicted by a CDHMM approach over the course of the metabolic cycle.}
 \end{figure}
 
