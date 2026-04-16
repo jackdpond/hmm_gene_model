@@ -128,7 +128,7 @@ The 300-minute period matches prior estimates of this particular metabolic proce
     \includegraphics[scale=0.5]{figures/rough-cell-expression-cycles.png}
 
     \includegraphics[scale=0.5]{figures/rough-gmm-classes.png}
-    \caption{Temporal cycles in cell state. [TODO: Cleanup and label] Upper Left: The 200 genes with the highest variance in the arcsinh transformed data were extracted and clustered with a GMM with four components, then the data dimensionality was reduced via PCA. Upper Right: The same plot with a line connecting adjacent timesteps. Bottom: When visualized, a clearly periodic pattern was clear in cluster assignment, repeating every 12 timesteps.}
+    \caption{Left: Projection to two principal components of 200-dimensional time-steps, colored by GMM assignment and connected in order. The clusters and cycle are clear. Right: GMM cluster assignments over time--the 12-time-step period is clear.}
 \end{figure}
 
 Armed with a knowledge of the period of the metabolic cycle, we can ask which genes oscillate, and when. We performed permutation testing to identify the genes with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the genes - over half of all genes - were identified as periodic with the 12 timestep period. Dimensionality reduction via PCA and visualization showed a clear difference in the distributions of periodic and non-periodic genes.
