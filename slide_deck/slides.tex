@@ -47,6 +47,9 @@
 % ─────────────────────────────────────────────────────────────────────────────
 \begin{document}
 
+% ──────────────────────────────────────────────────────────────────────────────
+% ──HENRY'S PART────────────────────────────────────────────────────────────────
+% ──────────────────────────────────────────────────────────────────────────────
 % ── Title ─────────────────────────────────────────────────────────────────────
 \begin{frame}
   \titlepage
@@ -112,6 +115,9 @@
   \end{enumerate}
 \end{frame}
 
+% ──────────────────────────────────────────────────────────────────────────────
+% ──JACK'S PART─────────────────────────────────────────────────────────────────
+% ──────────────────────────────────────────────────────────────────────────────
 % ─────────────────────────────────────────────────────────────────────────────
 \section{Phase I: Period Discovery}
 % ─────────────────────────────────────────────────────────────────────────────
@@ -130,35 +136,62 @@
     \item Approach 1: Keep top-$n$ highest-variance genes, sweep $n \in
           [200, 1100]$.
     \item Approach 2: Project all genes to 5 PCA components; select $k$ by held-out log-likelihood (first 24 train, last 12 test).
-    \item Both approaches recover $k=4$ clusters.
+    \item Both approaches recover $k=5$ clusters.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Result: Period = 12 Time Steps, 300 seconds}
   \begin{figure}
     \centering
-    \includegraphics[width=0.48\linewidth]{../paper/figures/rough-cell-expression-cycles.png}
+    \includegraphics[width=0.35\linewidth]{../paper/figures/rough-cell-expression-cycles.png}
     \hfill
-    \includegraphics[width=0.48\linewidth]{../paper/figures/rough-gmm-classes.png}
+    \includegraphics[width=0.6\linewidth]{../paper/figures/rough-gmm-classes.png}
     \caption{Left: 36 time points in PCA space, colored by GMM cluster.
              Right: Cluster assignment vs.\ time step, showing three
              complete repetitions of the 4-phase cycle.}
   \end{figure}
 \end{frame}
 
+\begin{frame}{Continuous-Density HMM Prediction}
+  \begin{itemize}
+    \item A \textbf{Gaussian mixture HMM (CDHMM)} treats the hidden metabolic
+          phase as a latent Markov chain and models observations with a GMM
+          emission distribution.
+    \item Hidden states correspond to the 4 metabolic phases recovered earlier.
+    \item Trained on the first 24 time steps; evaluated on the final 12.
+    % \item Captures \textbf{phase transitions} explicitly — emission
+    %       distributions encode which genes are up/down in each phase.
+    \item Prediction: given observed gene expression, infer the current
+          phase and project forward.
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{CDHMM plot}
+    \begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{../paper/figures/redone_metabolic_state.png}
+    \hfill
+    \caption{Most likely metabolic phase vs. time}
+  \end{figure}
+\end{frame}
+
 \begin{frame}{Period Discovery — Summary}
   \begin{itemize}
-    \item Every dimensionality-reduction and GMM variant converged to a \textbf{12-timestep period}.
+    \item Every dimensionality-reduction and GMM/CDHMM variant found a \textbf{12-timestep period}.
     \[
       T = 12 \times 25\,\text{min} = 300\,\text{min}
     \]
     \item Cluster assignments are near-deterministic (high posterior
-          probabilities), indicating well-separated phases. Also curse of dimensionality.
+          probabilities), indicating well-separated phases.
     \item The 36-point experiment spans exactly \textbf{3 complete cycles}.
     \item Independent confirmation of the period reported by Tu et al.
   \end{itemize}
 \end{frame}
 
+% ──────────────────────────────────────────────────────────────────────────────
+% ──WYATT'S PART────────────────────────────────────────────────────────────────
+% ──────────────────────────────────────────────────────────────────────────────
 % ─────────────────────────────────────────────────────────────────────────────
 \section{Phase II: Gene Analysis}
 % ─────────────────────────────────────────────────────────────────────────────
@@ -235,23 +268,9 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Continuous-Density HMM Prediction}
-  \begin{itemize}
-    \item A \textbf{Gaussian mixture HMM (CDHMM)} treats the hidden metabolic
-          phase as a latent Markov chain and models observations with a GMM
-          emission distribution.
-    \item Hidden states correspond to the 4 metabolic phases recovered earlier.
-    \item Trained on the first 24 time steps; evaluated on the final 12.
-    \item Captures \textbf{phase transitions} explicitly — emission
-          distributions encode which genes are up/down in each phase.
-    \item Prediction: given observed gene expression, infer the current
-          phase and project forward.
-  \end{itemize}
-
-  \medskip
-  % TODO: add quantitative results / figure once finalized
-\end{frame}
-
+% ──────────────────────────────────────────────────────────────────────────────
+% ──ISAAC'S PART────────────────────────────────────────────────────────────────
+% ──────────────────────────────────────────────────────────────────────────────
 % ─────────────────────────────────────────────────────────────────────────────
 \section{Semantic Annotation via LDA}
 % ─────────────────────────────────────────────────────────────────────────────
