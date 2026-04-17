@@ -129,10 +129,10 @@ We used PCA to visualize the distributions of expression patterns between the pe
     \label{fig:periodicpca}
 \end{figure}
 
-\subsection{Classical Time Series Analysis}
+\subsection{Classical Time Series Decomposition and Analysis}
 Once a suitable overall period and individual periodic transcripts were identified, we used classical time series analysis to investigate the periodic transcripts specifically in more depth. We obtained the classical time series decomposition the $\textit{arcsinh}$-transformed data for each individual gene via centered moving averages over the 24 central time steps (as the moving average requires timesteps at the beginning and end of the time series). We then Z-scored the seasonal components for each transcript across time points in that transcript's seasonal component. We clustered these Z-scored seasonal components used GMMs of varying cluster counts, finding 8 clusters to minimize the BIC values. Note that here we cluster \textit{transcripts}, whereas earlier we clustered \textit{time steps}. The time-step clustering recovered period-length, and the transcript clustering recovered distinct temporal modules of co-expressed transcripts.
 
-We then inspected the temporal patterns of the transcripts in each in more depth through visualization of the time series in each cluster. We removed one cluster which did not appear to have a consistent temporal pattern, but rather seemed like a catchall for transcripts that were not contained in any other cluster. The other clusters appeared to represent synchronized temporal expression modules, with different phases and shapes visible among the modules (Figure \ref{fig:seasonal-clusters}B). For the transcripts in these clusters, a UMAP plot of Z-scored expression patterns confirmed our suspicion that the topology of the transcription modules is annular. The phases of each modules' peak expression appears to be correlated with the angular position of the gene on the UMAP plot (Figure \ref{fig:seasonal-clusters}A).
+We then inspected the temporal patterns of the transcripts in each in more depth through visualization of the time series in each cluster. We removed one cluster which did not appear to have a consistent temporal pattern, but rather seemed like a catchall for transcripts that were not contained in any other cluster. The other clusters appeared to represent synchronized temporal expression modules, with different phases and shapes visible among the modules (Figure \ref{fig:seasonal-clusters}B). For the transcripts in these clusters, a UMAP plot of Z-scored expression patterns confirmed our suspicion that the topology of the transcription modules is annular. The phases of each modules' peak expression appears to be correlated with the angular position of the gene on the UMAP plot (Figure \ref{fig:seasonal-clusters}A). A video animation confirmed this observation.
 
 \begin{figure}
     \includegraphics[scale=0.5]{figures/rough-seasonal-clusters.png}
@@ -142,30 +142,42 @@ We then inspected the temporal patterns of the transcripts in each in more depth
 
 
 \subsection{ARIMA}
-We attempted to fit the data to an ARMA model. Largely, these efforts are unsuccessful. While we can fit individual transcripts as ARMA models, efforts to include interactions between transcripts failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results. We attribute this result to the inherent periodicity in our data. This violates ARMA's assumption of a covariance stationary time series (the expected value of the time series is different at different time steps). In our case, first and second differencing (ARIMA) did not eliminate the problems, which makes sense because the trend was not linear or quadratic but oscillatory. Some literature search showed that seasonal differencing could be an appropriate solution for future work \cite{rob_j_hyndman_forecasting_2026}.
+\label{methods:arima}
+We attempted to fit the data to an ARMA model. Largely, these efforts are unsuccessful. While we can fit individual transcripts as ARMA models, efforts to include interactions between transcripts failed. To try to combat the curse of dimensionality, we attempted to fit multivariate ARMA models to reduced data from PCA, or to the mean trends of clustered data. However, these attempts also failed, either due to lack of convergence or to nonsensical results.
 
-\subsection{Semantic Cluster Evaluation}
+\subsection{Semantic Cluster Interpretation}
+In order to aid our biological interpretation, we performed Latent Dirichlet Allocation (LDA) using the natural language descriptions each of the transcripts' biological context. The natural language descriptions for each gene were constructed by concatenating several text fields in the metadata CSV: ``Sequence Source'', ``Target Description'', ``Gene Title'', ``Gene Ontology Biological Process'', ``Gene Ontology Cellular Component'', and ``Gene Ontology Molecular Function''. For transcript targets not associated with a gene, the gene-related fields were often blank.
 
+We considered each gene as a document, and performed LDA on the documents to identify conserved 10 topics. We iteratively added to the list of stopwords until the words appearing in the topics were composed entirely of meaningful biological terms and identifiers. We then extracted the top 20 keywords used in each of the 10 topics, and gave these words to Claude Sonnet 4.6 to classify into themes.
 
+\begin{figure}
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/claude-labeling.png}
+    \end{center}
+    \caption{Some of the keywords used by Claude Sonnet 4.6 to summarize each toipc.}
+    \label{fig:claude-labeling}
+\end{figure}
 
+We then analyzed the contributions of each topic to each gene's contextual label, identified the topic with the highest contribution for each gene, and investigated the concordnace of toipcs and transcriptional modules.
 
+\begin{figure}
+    \includegraphics[scale=0.5]{figures/rough-heatmap-rownorm-annotated.png}
+
+    \includegraphics[scale=0.3]{figures/image.png}
+    \caption{\textbf{A} (top) Row-normalized heatmap counting transcripts with each combination of module (column) and topic (row) membership. The columns are sorted temporally in terms of increasing phase as seen in Figure \ref{fig:seasonal-clusters}, and a correlation between module phase and the distribution of its transcripts' topics is observed. \textbf{B} (bottom) The three metabolic modules identified in \cite{Tu2005}. Note the correlation (red, green, blue) of module ordering with topics in \textbf{A}.}
+    \label{fig:heatmap}
+\end{figure}
 
 %%Fourth Section
 \section{Results and Analysis} 
 % Clearly and succinctly describe your results. Give a thorough analysis and a thoughtful discussion of the conclusions that can be drawn.  Discuss the suitability and effectiveness of the different models and methods for the problems or questions treated.  
-We first performed GMM clustering and fit a CDHMM across the time steps. The key takeaway was the recovery of the period of the yeast's metabolic cycle. Every method tried consistently recovered a 12 time-step period, or 300 minutes. Thus the dataset spans exactly three periods. The cluster assignments are near-deterministic, indicating well-separated phases. The high-dimensionality of the data and the relatively low number of timesteps makes this reasonable. For each iteration of GMM clustering and CDHMM fitting, $k=5$ hidden states was most robust, but the numer of clusters had no bearing on the recovered period of the metabolic cycle--all numbers of clusters recovered the same period with these methods.
+We first performed GMM clustering and fit a CDHMM across the time steps. The key takeaways were 1. the consistent recovery of the period of the yeast's metabolic cycle (300 minutes), which independently verifies the $\approx 300$ minute period recovered by Tu et al.\ \cite{Tu2005} via distinct methods; and 2. the consistent identification of the optimal number (5) of distinct yeast transcription states/clusters, which was not identified in \cite{Tu2005}.
 
-The 300-minute period matches prior estimates of this particular metabolic process well, and our work independently verifies the period recovered by Tu et al.\ \cite{Tu2005}. We use knowledge of the period in downstream methods, such as for classical time series analysis, and the splitting of data into basically periodic and non-periodic. 
+Permutation testing identified 5243 of the transcripts--over half of all transcripts--as periodic with the 12 timestep period. This number roughly agrees with \cite{Tu2005}, while our methods (use of permutation testing) are unique. Classical time series decomposition of the periodic transcripts enabled identification of transcriptional modules--clusters of transcripts that peaked and trough in sync. These clusters peaked with different phases (Figure \ref{fig:seasonal-clusters}), which were correlated with transcript biological function as identified via LDA (Figure \ref{fig:heatmap} A).
 
+The temporal ordering of biological functions we identified in the metabolic cycle (Figure \ref{fig:heatmap} A) generally agreed with the ordering of oxidative, reductive building, and reductive charging phases (Figure \ref{fig:heatmap} B) described in \cite{Tu2005}. Our biological module identification was more granular than \cite{Tu2005}, with more temporal modules identified (7 vs 3), and interpreting these extra modules would be best done with a domain expert, but the general agreement of the overall trends between our analyses is encouraging, especially given that we used unsupervised methods.
 
-
-Armed with a knowledge of the period of the metabolic cycle, we can ask which transcripts oscillate, and when. We performed permutation testing to identify the transcripts with significant 12-timestep delay autocorrelations, in line with our conclusion that a 12 timestep period was most plausible. Via this analysis, 5243 of the transcripts - over half of all transcripts - were identified as periodic with the 12 timestep period. Dimensionality reduction via PCA and visualization showed a clear difference in the distributions of periodic and non-periodic transcripts.
-
-
-
-\textbf{TODO LDA results}
-
-ARMA models were explored but failed to converge meaningfully due to the inherent nonlinearity of periodic data; see Methods §3.4.
+ARMA models were explored but failed to converge meaningfully (see Methods \ref{methods:arima}). We attribute this result to the inherent periodicity in our data. This violates ARMA's assumption of a covariance stationary time series (the expected value of the time series is different at different time steps). In our case, first and second differencing (ARIMA) did not eliminate the problems, which makes sense because the trend was not linear or quadratic but oscillatory. Some literature search showed that seasonal differencing could be an appropriate solution for future work \cite{rob_j_hyndman_forecasting_2026}.
 
 
 %%Fifth Section
@@ -173,18 +185,14 @@ ARMA models were explored but failed to converge meaningfully due to the inheren
 % Thoughtfully analyze the ethical implications of your research questions, the data you gathered, and the analysis that was performed.  Are there privacy or other implications from the collection or use of the data?  Could your results and methods be misused or misunderstood?  What can and should be done to prevent misuse and misunderstanding?  Could your algorithms and methods result in a destructive self-fulfilling feedback loop?  How could that be prevented or controlled?  What other ethical implications does your work have?  
 Our data are derived exclusively from yeast cells, which avoids many of the ethical dilemmas associated with using a dataset derived from the human transcriptome. However, we recognize that important scientific and medical insights are obtained by thorough analysis of the human transcriptome and genome, and that investigations of those datasets require significant discression, prudence, and strict privacy regulations to ensure the safety of all participants. 
 
-In addition to considerations about extensions to human-derived data, we also consider the impact our work has on scientific replicability. Interpretation and analysis of large genomic or transcriptomic data sets is becoming a canonical use case for the application of various data analysis techniques like the ones used here. Using a strategy of analyzing data using various techniques and at various levels of data dimension reduction can provide novel insights into the dataset being studied, and when several techniques converge to the same conclusion, results obtain an additional robustness. 
-In an era when the biological sciences are becoming increasingly under strain by a crisis of reproducibility and replication, the ability to produce consistent conclusions when reexamining and validating the analysis of a dataset is critical. 
+In addition to considerations about extensions to human-derived data, we also consider the impact our work has on scientific replicability. The ability to produce consistent conclusions when reexamining and validating the analysis of a dataset is critical.When multiple teams find consistent results using different analysis methods, the scientific interpretations become more reliable and stronger \cite{botvinik-nezer_variability_2020}.The analysis of large genomic and transcriptomic data sets is involving more complicated analysis pipelines, so practicing replication is a positive ethical practice that we attempt to perform here. When several techniques converge to the same conclusion, results obtain an additional robustness.
 
-Obviously, mathematical evaluation of mathematical data does $\textit{not}$ address the crux of this crisis - replication, where an experiment is repeated to validate previous results. However, when replication is situationally challenging, developing robust strategies of reproducibility can strengthen the credibility of scientific researchers and strengthen their conclusions. Thus, deployment of various strategies to analyze complicated, high-dimensional data is important both to gain novel insights into experimental data, but also to validate previous conclusions about a dataset. Prudent, robust, and comprehnsive
-approaches to reproducibility lends additional credibility to experimental conclusions, and thus are a boon to the credibility of modern biological sciences as a whole.
-
-
+Obviously, mathematical evaluation of mathematical data does $\textit{not}$ address the other side of the coin - experimental replication, where a experiment is repeated to collect additional data to validate previous results. However, robust strategies of reproducibility can lead to new questions about the same data, spurring more interesting future experiments that not only verify but build upon the findings of previous experiments. Thus, deployment of various strategies to analyze complicated, high-dimensional data is important both to validate previous conclusions about a dataset, and encourage novel research that helps qualify and extend those results honestly.
 
 %% Sixth section
 \section{Conclusion} 
 % Describe the final conclusions that you draw from your computations, results, and analysis. 
-Analyzing the data provided an independent confirmation of some of the conclusions of Tu et al.\ \cite{Tu2005}. For example, the period they identified from the data (300 minutes) for the yeast metabolic cycle oscillations via a maximum likelihood analysis was rediscovered by our independent use of GMMs to cluster the timesteps, and we likewise identified slightly more than half of the dataset's transcripts as periodic with this period. This concordance reinforces the strength of those conclusions about their data. We also were able to provide novel analyses and interpretations of the data that Tu et al.\ did not reach. For example, our extraction of the seasonal components of the standardized time series and our use of GMMs to cluster them revealed 5-7 distinct periodic modules of activation, which improves upon the granularity of the original analysis \cite{Tu2005}, which identified only three clusters using k-means. This increased granularity could lead to improved biological insight. 
+Analyzing the data provided an independent confirmation of some of the conclusions of Tu et al.\ \cite{Tu2005}. For example, the period they identified from the data (300 minutes) for the yeast metabolic cycle oscillations via a maximum likelihood analysis was rediscovered by our independent use of GMMs to cluster the timesteps, and we likewise identified slightly more than half of the dataset's transcripts as periodic with this period. This concordance reinforces the strength of those conclusions about their data. We also were able to provide novel analyses and interpretations of the data that Tu et al.\ did not reach. For example, our extraction of the seasonal components of the standardized time series and our use of GMMs to cluster them revealed 5-7 distinct periodic modules of activation, which improves upon the granularity of the original analysis \cite{Tu2005}, which identified only three clusters using k-means. This validation combined with increased granularity represents an effort to replicate analyses, a validation of our computational toolset, and an opportunity to identify interesting new biological questions.
 
 
 %All text before this line should end before page 11 starts.
