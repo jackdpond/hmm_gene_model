@@ -60,24 +60,34 @@
 % ─────────────────────────────────────────────────────────────────────────────
 
 \begin{frame}{Motivation}
-
+  \includegraphics[scale=0.087]{figures/cost-of-sequencing-a-full-human-genome.png}
 \end{frame}
+
+\begin{frame}{Motivation}
+  \includegraphics[scale=0.3]{figures/covert.png}
+\end{frame}
+
 \begin{frame}{The Yeast Metabolic Cycle}
   \begin{itemize}
     \item \textit{Saccharomyces cerevisiae} (budding yeast) exhibits a spontaneous, synchronized \textbf{metabolic oscillation} when grown in continuous culture.
-    \item Thousands of genes are expressed periodically, in groups called \textbf{temporal modules}
+    \item Thousands of genes are expressed periodically in different phases
+    \item Many genes are co-expressed in groups we call \textbf{transcriptional modules}
   \end{itemize}
 
   \bigskip
   \begin{block}{Two Central Questions}
     \begin{enumerate}
-      \item What is the period of the metabolic cycle, and what are its phases?
-      \item Which genes drive each phase, and what biological processes do they represent?
+      \item What is the period of the metabolic cycle, and what are its modules/phases?
+      \item Which genes drive each module/phase, and what biological processes do they represent?
     \end{enumerate}
   \end{block}
 \end{frame}
 
-\begin{frame}{Dataset (maybe replace this slide with diagram)}
+\begin{frame}{Microarrays}
+  \includegraphics[scale=0.23]{figures/microarray.png}
+\end{frame}
+
+\begin{frame}{Dataset}
   \begin{itemize}
     \item \textbf{Source:} Tu et al.\ (2005), \textit{Science} — publicly available via GEO (GSM77298).
     \item \textbf{Assay:} Yeast whole-transcriptome microarray.
@@ -92,7 +102,7 @@
 % ─────────────────────────────────────────────────────────────────────────────
 
 \begin{frame}{Preprocessing Pipeline}
-  Raw intensities require three normalization steps before analysis.
+  We applied three normalization steps before analysis.
 
   \medskip
   \begin{enumerate}
@@ -103,7 +113,7 @@
             \item Result: \emph{relative} (not absolute) expression.
           \end{itemize}
 
-    \item \textbf{arcsinh transform. (maybe a graph would be good here)}
+    \item \textbf{arcsinh transform}
           Compresses the dynamic range (similar to $\log$, but handles zeros).
           \[
             \tilde{x} = \operatorname{arcsinh}(x) = \ln\!\bigl(x + \sqrt{x^2+1}\bigr)
@@ -255,17 +265,14 @@
 \end{frame}
 
 \begin{frame}{ARMA Forecasting on Individual Genes}
+  What we attempted:
   \begin{itemize}
-    \item ARMA$(p,q)$ models fit to each periodic gene's time series.
+    \item ARMA$(p,q)$ and ARIMA$(p,d,q)$ models fit to multivariate or univariate gene's time series.
     \item \textbf{Train:} first 24 time steps (2 full cycles).
           \textbf{Test:} last 12 time steps (1 held-out cycle).
     \item Order $(p,q)$ selected per gene by AIC.
-    \item Models capture the periodic structure and \textbf{predict the
-          final cycle} with reasonable accuracy for well-expressed,
-          high-amplitude genes.
-    \item Performance degrades for low-amplitude or noisy genes —
-          motivating more expressive sequence models.
   \end{itemize}
+  We attribute breakdown to periodicity - violates covariance stationary assumption
 \end{frame}
 
 % ──────────────────────────────────────────────────────────────────────────────
@@ -318,29 +325,35 @@
   \begin{figure}
     \centering
     % TODO: export final heatmap figure from semantic_2.ipynb and place here
-    % \includegraphics[width=\linewidth]{figures/topic_cluster_heatmap.pdf}
-    \caption{Heatmap of LDA topic weight vs.\ time-series cluster. Each
+    \includegraphics[width=\linewidth]{figures/rough-heatmap-rownorm.png}
+    \caption{Heatmap of LDA topic weight vs.\ time-series cluster. Columns ordered temporally by phase of the cluster cycle's peak. Each
              cell shows the fraction of genes in a cluster assigned to a
              given functional topic, revealing which biological processes
-             are co-activated in each temporal module.}
+             are activated in each temporal module.}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Key Biological Findings (This was written by Claude, check)}
-  Combining the temporal clusters with LDA topic weights reveals:
-  \begin{itemize}
-    \item \textbf{Early cycle (oxidative phase):} enrichment for
-          \textit{mitochondrial metabolism \& oxidative phosphorylation}
-          (Topic 7).
-    \item \textbf{Mid cycle:} enrichment for \textit{ribosome biogenesis}
-          (Topic 10) and \textit{cytoplasmic translation} (Topic 1) —
-          cells ramping up biosynthetic capacity.
-    \item \textbf{Late cycle (reductive phase):} \textit{cell cycle
-          checkpoints} (Topic 2) and \textit{chromosome segregation}
-          (Topic 6) — consistent with DNA replication gated to this phase.
-    \item \textit{Proteasome} activity (Topic 3) appears across multiple
-          phases, consistent with ongoing protein quality control.
-  \end{itemize}
+\begin{frame}{Key Biological Findings}
+  Combining the temporal clusters with LDA topic weights confirms and extends Tu et al.'s interpretation of phases:
+
+  \begin{center}
+    \includegraphics[width=0.8 \linewidth]{figures/tuetal.png}
+
+    \includegraphics[width=0.8 \linewidth]{figures/rough-heatmap-rownorm-annotated.png}
+  \end{center}
+  % \begin{itemize}
+  %   \item \textbf{Early cycle (oxidative phase):} enrichment for
+  %         \textit{mitochondrial metabolism \& oxidative phosphorylation}
+  %         (Topic 7).
+  %   \item \textbf{Mid cycle:} enrichment for \textit{ribosome biogenesis}
+  %         (Topic 10) and \textit{cytoplasmic translation} (Topic 1) —
+  %         cells ramping up biosynthetic capacity.
+  %   \item \textbf{Late cycle (reductive phase):} \textit{cell cycle
+  %         checkpoints} (Topic 2) and \textit{chromosome segregation}
+  %         (Topic 6) — consistent with DNA replication gated to this phase.
+  %   \item \textit{Proteasome} activity (Topic 3) appears across multiple
+  %         phases, consistent with ongoing protein quality control.
+  % \end{itemize}
 \end{frame}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -357,7 +370,7 @@
     \item \textbf{Temporal modules:} Seasonal decomposition + GMM
           identifies 7 coherent clusters of co-expressed genes, each with
           a distinct phase profile.
-    \item \textbf{Forecasting:} ARMA and CDHMM models capture the
+    \item \textbf{Forecasting:} CDHMM models capture the
           periodic dynamics and predict held-out expression.
     \item \textbf{Function:} LDA links each temporal module to specific
           biological processes — oxidative metabolism, translation,
@@ -414,8 +427,7 @@
         \item Draw term $w \sim \text{Categorical}(\bm{\phi}_z)$.
       \end{enumerate}
   \end{enumerate}
-  Inference via variational EM; $K=10$ topics selected by held-out
-  perplexity. Topic names assigned by prompting Claude with top-20 terms
+  Inference via EM; $K=10$ topics manually selected. Topic names assigned by prompting Claude with top-20 terms
   per topic.
 \end{frame}
 
